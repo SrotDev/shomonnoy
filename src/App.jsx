@@ -13,6 +13,7 @@ function App() {
       <div className="map-wrapper">
         <div style={{ width: '100%', height: '800px' }}>
           <MapView center={[23.7806, 90.4070]} zoom={13} />
+          
         </div>
       </div>
 
