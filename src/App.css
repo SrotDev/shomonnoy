@@ -1,0 +1,52 @@
+/* Reset & layout */
+/* * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+} */
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: sans-serif;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+header {
+  background-color: #000000;
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.5rem;
+}
+
+.map-wrapper {
+  z-index: 0;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+   margin-top: 500px;
+}
+
+footer {
+  background-color: rgb(0, 0, 0);
+  padding: 1rem;
+  text-align: center;
+}
+
+.leaflet-control-geocoder-form input {
+  background-color: white !important;
+  color: black !important;
+  border: 1px solid #ccc;
+  font-weight: bold;
+}
+
+.leaflet-control-geocoder-icon {
+  filter: invert(0); /* make sure icon is dark on light background */
+}
