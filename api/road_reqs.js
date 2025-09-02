@@ -1,45 +1,34 @@
 import express from 'express';
-import pg from 'pg';
+import { pool } from '../server.js';
 
 const router = express.Router();
-const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL
-});
-
-// POST /api/road_requests
-router.get('/test', (req, res) => {
-  res.json({ message: '✅ Road request route is working!' });
-});
 
 router.post('/', async (req, res) => {
   try {
-    const {
-      name,
-      company,
-      reason,
-      start_date,
-      end_date,
-      geometry // GeoJSON LineString from frontend
-    } = req.body;
+    console.log("🔵 Request received to /api/road_requests");
+    console.log("🟢 Body:", req.body);
 
-    const geomText = JSON.stringify(geometry);
+    const { name, status, timeline, company, reason, geometry } = req.body;
 
-    const query = `
-      INSERT INTO road_requests
-        (name, company, reason, start_date, end_date, geom)
-      VALUES
-        ($1, $2, $3, $4, $5, ST_SetSRID(ST_GeomFromGeoJSON($6), 4326))
-      RETURNING id
-    `;
+    const result = await pool.query(
+      `INSERT INTO roads (name, status, timeline, company, reason, geom)
+       VALUES ($1, $2, $3, $4, $5, ST_GeomFromGeoJSON($6)) RETURNING *`,
+      [name, status, timeline, company, reason, JSON.stringify(geometry)]
+    );
 
-    const values = [name, company, reason, start_date, end_date, geomText];
-    const result = await pool.query(query, values);
+    console.log("✅ Insert successful:", result.rows[0]);
 
-    res.json({ ok: true, id: result.rows[0].id });
+    res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error('❌ Failed to insert road request:', err);
-    res.status(500).json({ ok: false, error: 'Internal server error' });
+    console.error("❌ Error inserting road:", err.message);
+    res.status(500).json({ error: err.message });
   }
 });
+
+router.post('/test', (req, res) => {
+  console.log("📥 Received test JSON:", req.body);
+  res.json({ received: req.body });
+});
+
 
 export default router;
