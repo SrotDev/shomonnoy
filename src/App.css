@@ -4,12 +4,16 @@
   padding: 0;
   box-sizing: border-box;
 } */
-
+.content-wrapper {
+  
+  padding-top: 100px; 
+}
 html, body, #root {
   height: 100%;
   width: 100%;
   overflow-x: hidden;
   font-family: sans-serif;
+  background-color: #e8ecef;
 }
 
 .app-container {
@@ -26,7 +30,7 @@ header {
 }
 
 .map-wrapper {
-  z-index: 0;
+  z-index: 1;
   flex: 1;
   display: flex;
   justify-content: center;
@@ -48,5 +52,14 @@ footer {
 }
 
 .leaflet-control-geocoder-icon {
-  filter: invert(0); /* make sure icon is dark on light background */
+  filter: invert(0); 
+}
+
+.report-form-wrapper {
+  border: 2px dashed red;
+  padding: 24px;
+  background-color: #f0f0f0;
+  max-width: 600px;
+  margin: 0 auto;
+  z-index: 2;
 }

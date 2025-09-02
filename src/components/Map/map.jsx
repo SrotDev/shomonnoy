@@ -91,62 +91,44 @@ const MapView = ({ isCompany = true }) => {
     }).addTo(map);
 
     // Helper to draw roads using ORS route between first & last coords
-    const drawRoad = async (feature) => {
-      const coords = feature.geometry.coordinates;
-      const props = feature.properties;
+   const drawRoad = (feature) => {
+  const coords = feature.geometry.coordinates;
+  const props = feature.properties;
 
-      if (coords.length < 2) return;
+  if (!coords || coords.length < 2) return;
 
-      const start = coords[0];
-      const end = coords[coords.length - 1];
+  const color =
+    props.status === 'under_construction'
+      ? 'red'
+      : props.status === 'fixed'
+        ? 'green'
+        : props.status === 'upcoming'
+          ? 'orange'
+          : '#666';
 
-      const routeRes = await fetch(
-        'https://api.openrouteservice.org/v2/directions/driving-car/geojson',
-        {
-          method: 'POST',
-          headers: {
-            'Authorization': ORS_API_KEY,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ coordinates: [start, end] }),
-        }
-      );
+  const lineLayer = L.geoJSON(feature, {
+    style: {
+      color,
+      weight: 5,
+      opacity: 0.9
+    }
+  }).addTo(map);
 
-      const routeGeoJSON = await routeRes.json();
+  lineLayer.on('click', () => {
+    const popupContent = `
+      <b>${props.name || 'Unnamed Road'}</b><br/>
+      <b>Company:</b> ${props.company || 'N/A'}<br/>
+      <b>Reason:</b> ${props.reason || 'N/A'}<br/>
+      <b>Status:</b> ${props.status || 'Pending'}<br/>
+    `;
+    L.popup()
+      .setLatLng(lineLayer.getBounds().getCenter())
+      .setContent(popupContent)
+      .openOn(map);
+  });
+};
 
-      const color =
-        props.status === 'under_construction'
-          ? 'red'
-          : props.status === 'fixed'
-            ? 'green'
-            : props.status === 'upcoming'
-              ? 'orange'
-              : 'gray';
 
-      // Draw route
-      const roadLayer = L.geoJSON(routeGeoJSON, {
-        style: { color, weight: 5 },
-      }).addTo(map);
-
-      // Show info on click
-      roadLayer.on('click', () => {
-        const popupContent = `
-          <b>${props.name || 'Unnamed Road'}</b><br/>
-          <b>Status:</b> ${props.status || 'N/A'}<br/>
-          <b>Timeline:</b> ${props.timeline || 'N/A'}<br/>
-          <b>Company:</b> ${props.company || 'N/A'}<br/>
-          <b>Reason:</b> ${props.reason || 'N/A'}
-        `;
-        L.popup()
-          .setLatLng(roadLayer.getBounds().getCenter())
-          .setContent(popupContent)
-          .openOn(map);
-      });
-
-      // Add silent markers (no popup)
-      L.marker([start[1], start[0]]).addTo(map);
-      L.marker([end[1], end[0]]).addTo(map);
-    };
 
     // Fetch roads from backend
     fetch('http://localhost:5000/api/roads')

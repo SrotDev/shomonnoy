@@ -2,6 +2,9 @@ import express from 'express';
 import cors from 'cors';
 import pkg from 'pg';
 import roadRequests from './api/road_reqs.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const { Pool } = pkg;
 
@@ -14,16 +17,26 @@ app.use('/api/road_requests', roadRequests);
 
 
 // DB connection
-const pool = new Pool({
+
+
+
+
+const password = 'aaaaaa';
+console.log("Password Type:", typeof password); // Add this
+
+export const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
   database: 'shomonnoy',
-  password: 'aaaaaa',
+  password: password,
   port: 5432,
 });
 
-// Share the pool if needed in route files
-export { pool };
+
+
+
+
+
 
 // Main API route to fetch roads as GeoJSON
 app.get('/api/roads', async (req, res) => {
@@ -55,8 +68,7 @@ app.get('/api/roads', async (req, res) => {
   }
 });
 
-// Register request form route
-app.use('/api/road_requests', roadRequests);
+
 
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);
