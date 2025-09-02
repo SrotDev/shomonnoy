@@ -1,6 +1,8 @@
 import express from 'express';
 import cors from 'cors';
 import pkg from 'pg';
+import roadRequests from './api/road_reqs.js';
+
 const { Pool } = pkg;
 
 const app = express();
@@ -8,7 +10,10 @@ const port = 5000;
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/road_requests', roadRequests);
 
+
+// DB connection
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
@@ -17,6 +22,10 @@ const pool = new Pool({
   port: 5432,
 });
 
+// Share the pool if needed in route files
+export { pool };
+
+// Main API route to fetch roads as GeoJSON
 app.get('/api/roads', async (req, res) => {
   try {
     const result = await pool.query(`
@@ -45,6 +54,9 @@ app.get('/api/roads', async (req, res) => {
     res.status(500).send('Error fetching roads');
   }
 });
+
+// Register request form route
+app.use('/api/road_requests', roadRequests);
 
 app.listen(port, () => {
   console.log(`🚀 Server running at http://localhost:${port}`);
