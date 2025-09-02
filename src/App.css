@@ -26,7 +26,7 @@ header {
 }
 
 .map-wrapper {
-  z-index: 0;
+  z-index: 1;
   flex: 1;
   display: flex;
   justify-content: center;
@@ -49,4 +49,13 @@ footer {
 
 .leaflet-control-geocoder-icon {
   filter: invert(0); /* make sure icon is dark on light background */
+}
+
+.report-form-wrapper {
+  border: 2px dashed red;
+  padding: 24px;
+  background-color: #f0f0f0;
+  max-width: 600px;
+  margin: 0 auto;
+  z-index: 2;
 }

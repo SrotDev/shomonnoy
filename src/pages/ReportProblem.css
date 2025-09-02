@@ -1,0 +1,47 @@
+.report-problem {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+   display: block;
+}
+
+.report-problem h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #333;
+}
+
+.report-problem form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.report-problem input,
+.report-problem select,
+.report-problem textarea {
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  resize: vertical;
+}
+
+.report-problem button {
+  padding: 12px;
+  background-color: #0078d4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.report-problem button:hover {
+  background-color: #005fa3;
+}
