@@ -1,66 +1,40 @@
+
+
 import React, { useState } from 'react';
-import './ReportProblem.css'; // Optional styling — make sure this file exists or remove this line
-console.log("🧾 ReportProblem component loaded");
+import './ReportProblem.css';
+import illustrationImage from './my-illustration.png'; 
 
 const ReportProblem = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    issueType: '',
-    description: '',
-  });
-
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("🚀 Submitted:", formData);
-
-    // Temporary confirmation
-    alert("✅ Your report has been saved locally. Backend coming soon!");
-  };
+  
+  const [formData, setFormData] = useState({ name: '', issueType: '', description: '' });
+  const handleChange = (e) => { setFormData(prev => ({ ...prev, [e.target.name]: e.target.value })); };
+  const handleSubmit = (e) => { e.preventDefault(); alert("Submitted!"); };
 
   return (
-    <div className="report-problem">
-      <h2>🛠 Citizen Report Form</h2>
+    <div className="main-wrapper">
+      <div className="form-container">
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Affected Road Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-        />
+        <div className="graphic-side">
+          <img
+            src={illustrationImage}
+            alt="Citizen Report Illustration"
+            className="illustration"
+          />
+        </div>
 
-        <select
-          name="issueType"
-          value={formData.issueType}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select Problem Type</option>
-          <option value="potholes">Potholes</option>
-          <option value="blocked_drain">Blocked Drain</option>
-          <option value="waterlogging">Waterlogging</option>
-          <option value="damaged_road">Damaged Road</option>
-        </select>
-
-        <textarea
-          name="description"
-          placeholder="Describe the issue briefly"
-          value={formData.description}
-          onChange={handleChange}
-          required
-        />
-
-        <button type="submit">Submit Report</button>
-      </form>
+        <div className="form-side">
+          
+          <h2>Report an Issue</h2>
+          <p className="subtitle">Please fill out the form below.</p>
+          <form onSubmit={handleSubmit}>
+            
+            <div className="form-group"><label htmlFor="name">Affected Road Name</label><input type="text" id="name" name="name" className="form-control" placeholder="e.g., Main Street, Block 5" value={formData.name} onChange={handleChange} required /></div>
+            <div className="form-group"><label htmlFor="issueType">Select Problem Type</label><div className="select-wrapper"><select id="issueType" name="issueType" className="form-control" value={formData.issueType} onChange={handleChange} required><option value="" disabled>Choose a problem...</option><option value="potholes">Potholes</option><option value="blocked_drain">Blocked Drain</option></select></div></div>
+            <div className="form-group"><label htmlFor="description">Describe the issue briefly</label><textarea id="description" name="description" className="form-control" placeholder="Provide details like landmark, severity, etc." value={formData.description} onChange={handleChange} required /></div>
+            <button type="submit" className="submit-btn">Submit Report</button>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

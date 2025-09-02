@@ -4,12 +4,16 @@
   padding: 0;
   box-sizing: border-box;
 } */
-
+.content-wrapper {
+  
+  padding-top: 100px; 
+}
 html, body, #root {
   height: 100%;
   width: 100%;
   overflow-x: hidden;
   font-family: sans-serif;
+  background-color: #e8ecef;
 }
 
 .app-container {
@@ -48,7 +52,7 @@ footer {
 }
 
 .leaflet-control-geocoder-icon {
-  filter: invert(0); /* make sure icon is dark on light background */
+  filter: invert(0); 
 }
 
 .report-form-wrapper {

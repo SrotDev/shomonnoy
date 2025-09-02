@@ -1,47 +1,188 @@
-.report-problem {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 24px;
-  background-color: #f9f9f9;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  font-family: 'Segoe UI', sans-serif;
-   display: block;
+
+
+body, html {
+  margin: 0;
+  padding: 0;
+  background-color: #387a6d; 
 }
 
-.report-problem h2 {
-  text-align: center;
-  margin-bottom: 24px;
-  color: #333;
-}
-
-.report-problem form {
+.main-wrapper {
+  padding-top: 130px;
+  padding-bottom: 70px;
   display: flex;
-  flex-direction: column;
-  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  box-sizing: border-box;
+
+ 
+  background-color: #f1f1f1; 
+  background-image: url('/background-pattern.png'); 
+  background-size: 300px;
+  background-repeat: repeat;
 }
 
-.report-problem input,
-.report-problem select,
-.report-problem textarea {
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 16px;
-  resize: vertical;
+
+
+.form-container {
+   
+    max-width: 1000px;  
+    height: 600px; 
+    background: #378047;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    display: flex;
+    overflow: hidden;
+    position: relative;
+    margin: 0;          
+    border: none; 
 }
 
-.report-problem button {
-  padding: 12px;
-  background-color: #0078d4;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+
+
+.graphic-side {
+    flex: 1;
+    position: relative;
+    padding: 0; 
 }
 
-.report-problem button:hover {
-  background-color: #005fa3;
+.graphic-side .illustration {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    padding: 0;
+    
+    margin: 0;         
+    display: block; 
+    
+}
+
+.form-side {
+    flex: 1.1;
+    background-color: #378047;
+    padding: 50px 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-top-left-radius: 80px;
+    border-bottom-left-radius: 80px;
+    margin-left: -50px;
+    z-index: 2;
+}
+
+.form-side h2 {
+    color: #ffffff;
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.form-side .subtitle {
+    color: #c1e0d8;
+    margin-bottom: 35px;
+}
+
+.form-group {
+    margin-bottom: 8px;
+}
+
+.form-group label {
+    display: block;
+    color: #ffffff;
+    margin-bottom: 0px;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 14px 20px;
+    background-color: transparent;
+    border: 1px solid #a7e0c6;
+    border-radius: 14px;
+    color: #ffffff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    outline: none;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-color: #ffffff;
+    box-shadow: 0 0 0 3px #a7e0c666;
+}
+
+.form-control::placeholder {
+    color: #c1e0d8;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+select.form-control {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+select.form-control option {
+  background: #7d7d7def;
+  color: #ffffff;
+}
+
+.select-wrapper::after {
+    content: '▼';
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    color: #a7e0c6;
+    font-size: 0.8rem;
+    pointer-events: none;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 16px;
+    background-color: #a7e0c6;
+    border: none;
+    border-radius: 14px;
+    color: #2c6f62;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.submit-btn:hover {
+    background-color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 950px) {
+    .form-container {
+        flex-direction: column;
+        min-height: auto;
+        max-width: 500px;
+    }
+    .graphic-side {
+        display: none;
+    }
+    .form-side {
+        margin-left: 0;
+        border-radius: 20px;
+        padding: 40px;
+    }
 }
