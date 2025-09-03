@@ -4,6 +4,8 @@ import '../css/authentication.css'
 import Navbar from "../components/Navbar";
 import { useState, useEffect } from "react";
 import AuthorityWorkReqNormal from "../components/authorityWorkReqNormal";
+import AuthorityWorkReqConflicted from "../components/authorityWorkReqConflict";
+import AuthorityWorkReqPending from "../components/authorityWorkReqPending";
 
 export default function AuthorityWorkRequests() {
     const [optState, setOptState] = useState(0);
@@ -20,7 +22,7 @@ export default function AuthorityWorkRequests() {
                 </motion.div>
 
 
-                <div className="flex flex-row gap-25 items-center justify-center mt-8 ml-52">
+                <div className="flex flex-row gap-10 items-center justify-center mt-8">
                     <motion.div className="bg-[rgb(114,198,158)]  rounded-3xl px-8 py-2  text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
                         whileHover={{
                             scale: 1.1,
@@ -70,11 +72,23 @@ export default function AuthorityWorkRequests() {
 
                     
                 </div>
-                <div className="mt-5 ml-10"> {/*content*/}
-                        {
-                            optState === 0 && <AuthorityWorkReqNormal/>
-                        }
+                <div className="flex flex-row">
+                        <div className="my-10 ml-10"> {/*content*/}
+                            {
+                                optState === 0 && <AuthorityWorkReqNormal/>
+                            }
+                            {
+                                optState === 1 && <AuthorityWorkReqConflicted />
+                            }
+                            {
+                                optState === 2 && <AuthorityWorkReqPending />
+                            }
+                        </div>
+                        <div>
+                            {/* TODO ADD MAP HERE */}
+                        </div>
                 </div>
+                
             </div>
 
         </>

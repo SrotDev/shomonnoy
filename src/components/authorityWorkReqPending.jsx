@@ -10,9 +10,10 @@ import '../css/authWorkReqNorm.css'
 import rightLogo from '../assets/material-symbols_check.png'
 import pointLogo from '../assets/mdi_location.png'
 import crossLogo from '../assets/maki_cross.png'
+import refreshLogo from '../assets/refresh.png'
 
 
-var noConflicts = [
+var pending = [
     {
         id: "WASA#20102",
         from: "1 Sep",
@@ -71,26 +72,34 @@ var noConflicts = [
 
 ];
 
-export default function AuthorityWorkReqNormal() {
+export default function AuthorityWorkReqPending() {
     return (
         <div className="flex flex-row mx-5 h-[calc(63vh)]">
             <div className="flex flex-col">
                 <div className="grow bg-[rgb(248,250,252)] p-5 rounded-4xl">
                     <div className="flex flex-col">
                         <div className="flex flex-row justify-start items-center gap-2">
-                            <div className="w-4 h-4 rounded-full bg-green-500"></div>
+                            <div className="w-4 h-4 rounded-full bg-violet-500"></div>
                             <p className="" style={{ fontSize: "1.8rem" }}>
-                                &nbsp; সাধারণ রিপোর্ট &nbsp;
-                                <span className="font-bold" style={{ color: "grey" }}>({noConflicts.length})</span>
+                                &nbsp; পুনঃনিরীক্ষণ আবেদনসমূহ &nbsp;
+                                <span className="font-bold" style={{ color: "grey" }}>({pending.length})</span>
                             </p>
                         </div>
                         <div className="flex flex-col mt-4 max-h-[calc(50vh)] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-white scrollable-container overflow-y-scroll"> {/*Scrollable div*/}
                             {
-                                noConflicts.map((item, idx) => {
+                                pending.map((item, idx) => {
+                                    const colors = [
+                                        "bg-red-100",
+                                        "bg-green-100",
+                                        "bg-blue-100",
+                                        "bg-yellow-100",
+                                        "bg-purple-100"
+                                    ];
+                                    const colorClass = colors[idx % colors.length];
                                     return (
                                         <motion.div
                                             key={idx}
-                                            className="flex flex-col text-black my-2 mx-2 bg-white rounded-4xl w-[calc(30vw)] py-5 px-5 shadow-[4px_6px_20px_1px_rgba(0,0,0,0.25)] bg-white/90 backdrop-blur-md"
+                                            className={`flex flex-col text-black my-2 mx-2 rounded-4xl w-[calc(30vw)] py-5 px-5 shadow-[4px_6px_20px_1px_rgba(0,0,0,0.25)] ${colorClass} backdrop-blur-md`}
                                         >
                                             <div className="flex flex-row justify-between items-center">
                                                 <p style={{ fontSize: '1.4rem' }}>{item.id}</p>
@@ -107,9 +116,9 @@ export default function AuthorityWorkReqNormal() {
                                                 <div className="flex flex-row justify-center">
                                                     <motion.div
                                                         className="w-8 h-8 rounded-lg bg-contain bg-center bg-no-repeat m-1"
-                                                        style={{ backgroundImage: `url(${rightLogo})` }}
+                                                        style={{ backgroundImage: `url(${refreshLogo})` }}
                                                         initial={{ backgroundColor: "#FFFFFF" }}
-                                                        whileHover={{ backgroundColor: "#E2FBD3", scale: 1.1 }}
+                                                        whileHover={{ backgroundColor: "#CBEEFFFF", scale: 1.1 }}
                                                         onClick={() => null}
                                                     />
                                                     <motion.div
