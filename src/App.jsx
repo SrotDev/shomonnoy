@@ -43,10 +43,7 @@ function App() {
         </Routes>
       </main>
 
-     
-      <footer>
-        <h3>Additional Content</h3>
-      </footer>
+
     </div>
   );
 }
