@@ -44,9 +44,9 @@ function App() {
         </Routes>
       </main>
 
-      <footer>
+      {/* <footer>
         <h3>Additional Content</h3>
-      </footer>
+      </footer> */}
     </div>
   );
 }

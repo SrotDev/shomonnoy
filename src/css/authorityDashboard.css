@@ -1,0 +1,8 @@
+@import "tailwindcss";
+
+
+.home-buttons{
+    margin-top: 27.5%;
+    z-index: 50;
+    
+}

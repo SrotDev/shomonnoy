@@ -4,11 +4,13 @@ import { BrowserRouter } from 'react-router-dom'
 import './index.css'
 import App from './App.jsx'
 import Authentication from './pages/authentication.jsx'
+import AuthorityDashboard from './pages/authorityDashboard.jsx'
+import AuthorityWorkRequests from './pages/authorityWorkRequests.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthorityWorkRequests />
     </BrowserRouter>
   </StrictMode>,
 )
