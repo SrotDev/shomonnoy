@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom"
-import { easeInOut, motion } from "framer-motion"
+import { easeInOut, motion, rgba } from "framer-motion"
 import { useState } from "react";
+
+import logo from '../assets/logo.png'
 
 import '../css/navbar.css'
 
@@ -43,57 +45,85 @@ const authority_LoginItems = [
 
 export default function Navbar({ state }) {
 
+    const formatText = (text) => {
+        // Add spaces between letters
+        const spacedText = text.split('').join(' ');
+
+        // Truncate after 10 characters and add ...
+        if (spacedText.length > 20) { // 20 because each letter now has a space
+            return spacedText.substring(0, 19) + '...';
+        }
+
+        return spacedText;
+    };
+
     return (
         <motion.div
             className="navbar-container fixed top-0 left-[16px] right-[31px] 
              flex flex-row rounded-lg shadow-[4px_2px_20px_10px_rgba(0,0,0,0.25)] bg-white/90 backdrop-blur-md"
-  whileHover={{ backgroundColor: "rgba(100,200,100,1)" }}
-            
+
+            whileHover={{ backgroundColor: "rgba(70,200,70,1)" }}
+
         // transition={{ ease: "easeInOut", duration: 0.2 }}
         >
-            <div> {/*Logo*/}
-                <img className="w-16 m-2" src="/logo.png" alt="Logo" />
+
+            <div className="flex flex-row">
+                <div> {/*Logo*/}
+                    <img className="w-14 mt-1 ml-2" src={logo} alt="Logo" />
+                </div>
+
+
+                <div className="flex flex-row text-white py-5 px-10 gap-8"> {/* Navbar Links*/}
+
+                    {state === "non_logged_in" && non_LoginItems.map(item => (
+                        <motion.div key={item.id} className=""
+                            whileHover={{ scale: 1.1 }}
+                        >
+                            <Link className="navbar-link" to={item.path}>{item.title}</Link>
+
+                        </motion.div>
+                    ))}
+
+                    {state === "user_logged_in" && user_LoginItems.map(item => (
+                        <motion.div key={item.id} className=""
+                            whileHover={{ scale: 1.1 }}
+                        >
+                            <Link className="navbar-link" to={item.path}>{item.title}</Link>
+
+                        </motion.div>
+                    ))}
+
+                    {state === "stakeholder_logged_in" && stakeHolder_LoginItems.map(item => (
+                        <motion.div key={item.id} className=""
+                            whileHover={{ scale: 1.1 }}
+                        >
+                            <Link className="navbar-link" to={item.path}>{item.title}</Link>
+
+                        </motion.div>
+                    ))}
+
+                    {state === "authority_logged_in" && authority_LoginItems.map(item => (
+                        <motion.div key={item.id} className=""
+                            whileHover={{ scale: 1.1 }}
+                        >
+                            <Link className="navbar-link" to={item.path}>{item.title}</Link>
+
+                        </motion.div>
+                    ))}
+                </div>
+
             </div>
 
+            <motion.div className="flex flex-col bg-white text-black my-3 rounded-3xl px-5 mr-10 justify-center login-text">
+                {
+                    state === "non_logged_in" && <p>Login</p>
+                }
 
-            <div className="flex flex-row text-white py-5 px-10 gap-8"> {/* Navbar Links*/}
+                {
+                    !(state === "non_logged_in") && <p className="font-bold"style={{color: "#64923D" }}>{formatText("Mumtio")}</p>
+                }
+            </motion.div>
 
-                {state === "non_logged_in" && non_LoginItems.map(item => (
-                    <motion.div key={item.id} className=""
-                        whileHover={{ scale: 1.1 }}
-                    >
-                        <Link className="navbar-link" to={item.path}>{item.title}</Link>
-
-                    </motion.div>
-                ))}
-
-                {state === "user_logged_in" && user_LoginItems.map(item => (
-                    <motion.div key={item.id} className=""
-                        whileHover={{ scale: 1.1 }}
-                    >
-                        <Link className="navbar-link" to={item.path}>{item.title}</Link>
-
-                    </motion.div>
-                ))}
-
-                {state === "stakeholder_logged_in" && stakeHolder_LoginItems.map(item => (
-                    <motion.div key={item.id} className=""
-                        whileHover={{ scale: 1.1 }}
-                    >
-                        <Link className="navbar-link" to={item.path}>{item.title}</Link>
-
-                    </motion.div>
-                ))}
-
-                {state === "authority_logged_in" && authority_LoginItems.map(item => (
-                    <motion.div key={item.id} className=""
-                        whileHover={{ scale: 1.1 }}
-                    >
-                        <Link className="navbar-link" to={item.path}>{item.title}</Link>
-
-                    </motion.div>
-                ))}
-            </div>
         </motion.div>
     );
 }
