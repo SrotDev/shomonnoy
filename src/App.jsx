@@ -6,6 +6,7 @@ import LandingPage from './pages/LandingPage';
 import ReportProblem from './pages/ReportProblem';
 import MapPage from './pages/MapPage';
 import { Routes, Route } from 'react-router-dom';
+import NoticePage from './pages/NoticePage/NoticePage';
 
 const userLoggedIn = true;
 
@@ -23,6 +24,8 @@ function App() {
          
          
           <Route path="/authority" element={<MapPage />} />
+
+         <Route path="/noticeboard" element={<NoticePage />} />
 
          
           <Route
