@@ -1,8 +1,12 @@
-
+// src/pages/LandingPage.jsx
 
 import React, { useState, useEffect } from 'react';
 import './LandingPage.css';
 import MapView from '../components/Map/map';
+
+import MapSidePanel from '../components/Map/MapSidePanel'; 
+
+
 
 const LandingPage = () => {
   const [carPosition, setCarPosition] = useState(12);
@@ -24,6 +28,7 @@ const LandingPage = () => {
 
   return (
     <div className="landing-page-wrapper">
+     
       <div className="landing-hero-section">
         <h1 className="landing-title">সমন্বয়</h1>
         <div className="scene-container">
@@ -92,20 +97,8 @@ const LandingPage = () => {
       </div>
 
       <div className="map-section-container">
-        <div className="map-side-panel">
-          <h2>সরাসরি প্রকল্পের মানচিত্র</h2>
-          <p>শহর জুড়ে বিভিন্ন সংস্থার চলমান এবং পরিকল্পিত কাজগুলি দেখুন।</p>
-          <ul className="map-legend">
-            <li><span className="color-dot wasa"></span>ওয়াসা</li>
-            <li><span className="color-dot desco"></span>ডেসকো / ডিপিডিসি</li>
-            <li><span className="color-dot rhd"></span>সওজ</li>
-            <li><span className="color-dot btcl"></span>বিটিসিএল</li>
-            <li><span className="color-dot other"></span>অন্যান্য</li>
-          </ul>
-          <div className="map-panel-footer">
-            <p>যেকোনো চিহ্নিত রাস্তায় ক্লিক করে প্রকল্পের বিস্তারিত তথ্য দেখুন।</p>
-          </div>
-        </div>
+       
+        <MapSidePanel />
         <div className="map-display-area">
           <MapView />
         </div>

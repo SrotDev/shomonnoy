@@ -1,0 +1,10 @@
+.map-page-container {
+  display: flex;
+  height: calc(100vh - 80px); 
+  width: 100%;
+}
+
+.map-display-area {
+  flex: 1;
+  height: 100%;
+}
