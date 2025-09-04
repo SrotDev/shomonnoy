@@ -6,13 +6,14 @@ import Navbar from './components/Navbar';
 import ReportProblem from './pages/ReportProblem';
 import LandingPage from './pages/LandingPage'; 
 import { Routes, Route } from 'react-router-dom';
+import Authentication from './pages/authentication';
 
 const userLoggedIn = true;
 
 function App() {
   return (
     <div className="app-container">
-      <Navbar state="user_logged_in" />
+      <Navbar state="non_logged_in" />
 
     
       <main className="content-wrapper">
@@ -20,7 +21,8 @@ function App() {
          
           <Route path="/" element={<LandingPage />} />
 
-         
+          <Route path="/authenticate" element={<Authentication/>}/>
+          
           <Route path="/authority" element={
             <div className="map-wrapper">
               <div style={{ width: '100%', height: '800px' }}>

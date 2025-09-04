@@ -91,6 +91,8 @@ export default function AuthorityWorkReqNormal() {
                                         <motion.div
                                             key={idx}
                                             className="flex flex-col text-black my-2 mx-2 bg-white rounded-4xl w-[calc(30vw)] py-5 px-5 shadow-[4px_6px_20px_1px_rgba(0,0,0,0.25)] bg-white/90 backdrop-blur-md"
+
+                                            whileHover={{scale: 1.02}}
                                         >
                                             <div className="flex flex-row justify-between items-center">
                                                 <p style={{ fontSize: '1.4rem' }}>{item.id}</p>
