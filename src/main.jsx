@@ -11,7 +11,7 @@ import AuthorityConflictChart from './pages/authorityConflictChart.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <App />
+      <AuthorityConflictChart />
     </BrowserRouter>
   </StrictMode>,
 )
