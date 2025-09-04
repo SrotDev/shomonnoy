@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import './LandingPage.css';
 import MapView from '../components/Map/map';
