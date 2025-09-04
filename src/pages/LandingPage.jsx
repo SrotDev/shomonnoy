@@ -132,7 +132,7 @@ const LandingPage = () => {
         </div>
       </div>
 
-    </>
+    
       <div className="map-section-container">
        
         <MapSidePanel />
@@ -140,7 +140,8 @@ const LandingPage = () => {
           <MapView />
         </div>
       </div>
-    </div>
+    
+    </>
   );
 };
 
