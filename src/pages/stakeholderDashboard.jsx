@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 import './LandingPage.css';
 import '../css/authorityDashboard.css'
 
-export default function AuthorityDashboard() {
+export default function StakeholderDashboard() {
     const [carPosition, setCarPosition] = useState(12);
     
       useEffect(() => {
@@ -26,7 +26,7 @@ export default function AuthorityDashboard() {
 
     return (
         <>
-            <Navbar state="authority_logged_in"></Navbar>
+            <Navbar state="stakeholder_logged_in"></Navbar>
             <div className="landing-hero-section">
                 <div className="flex flex-col items-center justify-center">
                     <h1 className="landing-title">সমন্বয়</h1>
@@ -40,12 +40,12 @@ export default function AuthorityDashboard() {
                             whileHover={{
                                 scale : 1.1,
                             }}
-                        ><p>কনফ্লিক্ট চার্ট</p></motion.div>
+                        ><p>নতুন রিপোর্ট তৈরি </p></motion.div>
                         <motion.div className="bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
                             whileHover={{
                                 scale : 1.1
                             }}
-                        ><p>মানচিত্র দেখুন</p></motion.div> 
+                        ><p>ফিডব্যাক</p></motion.div> 
                     </div>
                 </div>
                 
