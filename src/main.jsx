@@ -6,11 +6,12 @@ import App from './App.jsx'
 import Authentication from './pages/authentication.jsx'
 import AuthorityDashboard from './pages/authorityDashboard.jsx'
 import AuthorityWorkRequests from './pages/authorityWorkRequests.jsx'
+import AuthorityConflictChart from './pages/authorityConflictChart.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthorityWorkRequests />
+      <App />
     </BrowserRouter>
   </StrictMode>,
 )

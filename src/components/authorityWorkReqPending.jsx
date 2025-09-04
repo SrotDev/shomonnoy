@@ -85,7 +85,7 @@ export default function AuthorityWorkReqPending() {
                                 <span className="font-bold" style={{ color: "grey" }}>({pending.length})</span>
                             </p>
                         </div>
-                        <div className="flex flex-col mt-4 max-h-[calc(50vh)] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-white scrollable-container overflow-y-scroll"> {/*Scrollable div*/}
+                        <div className="flex flex-col mt-4 max-h-[calc(50vh)] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-white scrollable-container overflow-y-auto"> {/*Scrollable div*/}
                             {
                                 pending.map((item, idx) => {
                                     const colors = [

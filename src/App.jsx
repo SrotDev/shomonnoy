@@ -7,13 +7,16 @@ import ReportProblem from './pages/ReportProblem';
 import MapPage from './pages/MapPage';
 import { Routes, Route } from 'react-router-dom';
 import NoticePage from './pages/NoticePage/NoticePage';
+import Authentication from './pages/authentication';
+
 
 const userLoggedIn = true;
 
 function App() {
   return (
     <div className="app-container">
-      <Navbar state="user_logged_in" />
+      <Navbar state="non_logged_in" />
+
     
       <main className="content-wrapper">
         <Routes>
@@ -21,7 +24,8 @@ function App() {
          
           <Route path="/" element={<LandingPage />} />
 
-         
+          <Route path="/authenticate" element={<Authentication/>}/>
+          
          
           <Route path="/authority" element={<MapPage />} />
 

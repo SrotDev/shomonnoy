@@ -70,7 +70,16 @@ var conflicts = [
         to: "19 Sep",
         isEmergency: true,
 
-    },],
+    },
+    {
+        id: "WASA#20102",
+        from: "1 Sep",
+        to: "19 Sep",
+        isEmergency: false,
+
+    },
+
+],
 ];
 
 export default function AuthorityWorkReqConflicted() {
@@ -98,18 +107,23 @@ export default function AuthorityWorkReqConflicted() {
                                         >
                                             <div className="flex flex-col rounded-2xl py-1 px-3 items-center justify-center bg-[rgb(246,235,255)]" ><span className="text-violet-600">RESOLVE</span></div>
                                             <div className="mt-4"></div>
-                                            <div className="flex flex-row justify-between items-center">
+
+                                            {
+                                                item.map((i, id) => {
+                                                    return(<>
+                                                    <div className="flex flex-row justify-between items-center">
                                                 
-                                                <p style={{ fontSize: '1.4rem' }}>{item.at(0).id}</p>
-                                                {item.at(0).isEmergency &&
+                                                <p style={{ fontSize: '1.4rem' }}>{i.id}</p>
+                                                {i.isEmergency &&
                                                     <motion.div className="bg-[rgb(252,210,220)] rounded-3xl px-3 py-1 text-center backdrop-blur-md font-bold "
                                                     >
                                                         <p style={{ color: 'red', fontSize: '0.7rem' }}>জরুরী</p>
                                                     </motion.div>}
                                             </div>
+                                        
                                             <div className="mt-2"></div>
                                             <div className="flex flex-row justify-between items-center">
-                                                <p style={{ fontSize: '1.2rem' }}>{item.at(0).from} - {item.at(0).to}</p>
+                                                <p style={{ fontSize: '1.2rem' }}>{i.from} - {i.to}</p>
 
                                                 <div className="flex flex-row justify-center">
                                                     <motion.div
@@ -137,43 +151,12 @@ export default function AuthorityWorkReqConflicted() {
                                                 </div>
                                             </div>
                                             <div className="mt-5"></div>
-                                            <div className="flex flex-row justify-between items-center">
-                                                <p style={{ fontSize: '1.4rem' }}>{item.at(1).id}</p>
-                                                {item.at(1).isEmergency &&
-                                                    <motion.div className="bg-[rgb(252,210,220)] rounded-3xl px-3 py-1 text-center backdrop-blur-md font-bold "
-                                                    >
-                                                        <p style={{ color: 'red', fontSize: '0.7rem' }}>জরুরী</p>
-                                                    </motion.div>}
-                                            </div>
-                                            <div className="mt-2"></div>
-                                            <div className="flex flex-row justify-between items-center">
-                                                <p style={{ fontSize: '1.2rem' }}>{item.at(1).from} - {item.at(1).to}</p>
+                                                    </>)
+                                                })
+                                            }
 
-                                                <div className="flex flex-row justify-center">
-                                                    <motion.div
-                                                        className="w-8 h-8 rounded-lg bg-contain bg-center bg-no-repeat m-1"
-                                                        style={{ backgroundImage: `url(${rightLogo})` }}
-                                                        initial={{ backgroundColor: "#FFFFFF" }}
-                                                        whileHover={{ backgroundColor: "#E2FBD3", scale: 1.1 }}
-                                                        onClick={() => null}
-                                                    />
-                                                    <motion.div
-                                                        className="w-8 h-8 mr-1 rounded-lg bg-contain bg-center bg-no-repeat m-1"
-                                                        style={{ backgroundImage: `url(${pointLogo})` }}
-                                                        initial={{ backgroundColor: "#FFFFFF" }}
-                                                        whileHover={{ backgroundColor: "#E2FBD3", scale: 1.1 }}
-                                                        onClick={() => null}
-                                                    /*  ^^^^^^^^^^^ TODO FOR MAPS*/
-                                                    />
-                                                    <motion.div
-                                                        className="w-8 h-8 rounded-lg bg-contain bg-center bg-no-repeat m-1"
-                                                        style={{ backgroundImage: `url(${crossLogo})` }}
-                                                        initial={{ backgroundColor: "#FFFFFF" }}
-                                                        whileHover={{ backgroundColor: "#FFE4E4FF", scale: 1.1 }}
-                                                        onClick={() => null}
-                                                    />
-                                                </div>
-                                            </div>
+                                            
+                                            
                                         </motion.div>
                                     )
                                 })
