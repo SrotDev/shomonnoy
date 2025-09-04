@@ -10,11 +10,12 @@ import AuthorityConflictChart from './pages/authorityConflictChart.jsx'
 import StakeholderDashboard from './pages/stakeholderDashboard.jsx'
 import ReportProblem from './pages/ReportProblem.jsx'
 import StakeholderWorkReq from './pages/stakeholderWorkReq.jsx'
+import StakeholderNewReq from './pages/stakeholderNewReq.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <StakeholderWorkReq />
+      <StakeholderNewReq />
     </BrowserRouter>
   </StrictMode>,
 )
