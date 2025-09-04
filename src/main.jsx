@@ -7,11 +7,14 @@ import Authentication from './pages/authentication.jsx'
 import AuthorityDashboard from './pages/authorityDashboard.jsx'
 import AuthorityWorkRequests from './pages/authorityWorkRequests.jsx'
 import AuthorityConflictChart from './pages/authorityConflictChart.jsx'
+import StakeholderDashboard from './pages/stakeholderDashboard.jsx'
+import ReportProblem from './pages/ReportProblem.jsx'
+import StakeholderWorkReq from './pages/stakeholderWorkReq.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthorityConflictChart />
+      <StakeholderWorkReq />
     </BrowserRouter>
   </StrictMode>,
 )

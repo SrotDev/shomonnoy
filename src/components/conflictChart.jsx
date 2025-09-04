@@ -239,7 +239,7 @@ function ConflictGroup({ tasks, idx }) {
                         backgroundColor: "#72C69E",
                         color: "#F1FFEE"
                     }}
-                    onClick={() => null}
+                    onClick={() => null} /*TODO MAP */
                 >
                     <p>ম্যাপে দেখুন</p>
                 </motion.div>
@@ -300,7 +300,7 @@ function ConflictChart({ initialTasks, onTasksChange }) {
     );
 }
 
-// --- Helper function from earlier ---
+
 function hasDayOverlap(tasks) {
     function normalizeDate(date) {
         return new Date(date.getFullYear(), date.getMonth(), date.getDate());
