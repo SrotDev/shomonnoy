@@ -1,10 +1,10 @@
-
+// src/App.js - FINAL CORRECTED VERSION
 
 import './App.css';
-import MapView from './components/Map/map';
 import Navbar from './components/Navbar';
+import LandingPage from './pages/LandingPage';
 import ReportProblem from './pages/ReportProblem';
-import LandingPage from './pages/LandingPage'; 
+import MapPage from './pages/MapPage';
 import { Routes, Route } from 'react-router-dom';
 import Authentication from './pages/authentication';
 
@@ -19,18 +19,15 @@ function App() {
       <main className="content-wrapper">
         <Routes>
          
+         
           <Route path="/" element={<LandingPage />} />
 
           <Route path="/authenticate" element={<Authentication/>}/>
           
-          <Route path="/authority" element={
-            <div className="map-wrapper">
-              <div style={{ width: '100%', height: '800px' }}>
-                <MapView center={[23.7806, 90.4070]} zoom={13} />
-              </div>
-            </div>
-          } />
+         
+          <Route path="/authority" element={<MapPage />} />
 
+         
           <Route
             path="/complaint/issueReporting"
             element={
@@ -43,12 +40,13 @@ function App() {
               )
             }
           />
+
+          
+
         </Routes>
       </main>
 
-      {/* <footer>
-        <h3>Additional Content</h3>
-      </footer> */}
+
     </div>
   );
 }

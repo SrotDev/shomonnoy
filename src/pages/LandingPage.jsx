@@ -8,6 +8,10 @@ const access_token = localStorage.getItem('access_token')
 
 
 
+import MapSidePanel from '../components/Map/MapSidePanel'; 
+
+
+
 const LandingPage = () => {
   const [carPosition, setCarPosition] = useState(12);
   const [navState, setNavState] = useState("non_logged_in");
@@ -128,6 +132,14 @@ const LandingPage = () => {
       </div>
 
     </>
+      <div className="map-section-container">
+       
+        <MapSidePanel />
+        <div className="map-display-area">
+          <MapView />
+        </div>
+      </div>
+    </div>
   );
 };
 
