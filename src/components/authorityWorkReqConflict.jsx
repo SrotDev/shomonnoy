@@ -1,172 +1,132 @@
-import { Link } from "react-router-dom"
-import { AnimatePresence, easeInOut, motion, scale } from "framer-motion"
-import '../css/authentication.css'
-import { useState, useEffect } from "react";
-
-import '../css/authWorkReqNorm.css'
+import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 
-import rightLogo from '../assets/material-symbols_check.png'
-import pointLogo from '../assets/mdi_location.png'
-import crossLogo from '../assets/maki_cross.png'
-
-var conflicts = [
-    [{
-        id: "WASA#20102",
-        from: "1 Sep",
-        to: "19 Sep",
-        isEmergency: false,
-
-    },
-
-    {
-        id: "WASA#20102",
-        from: "1 Sep",
-        to: "19 Sep",
-        isEmergency: true,
-
-    },],
-    [{
-        id: "WASA#20102",
-        from: "1 Sep",
-        to: "19 Sep",
-        isEmergency: false,
-
-    },
-
-    {
-        id: "WASA#20102",
-        from: "1 Sep",
-        to: "19 Sep",
-        isEmergency: true,
-
-    },],
-    [{
-        id: "WASA#20102",
-        from: "1 Sep",
-        to: "19 Sep",
-        isEmergency: true,
-
-    },
-
-    {
-        id: "WASA#20102",
-        from: "1 Sep",
-        to: "19 Sep",
-        isEmergency: true,
-
-    },],
-    [{
-        id: "WASA#20102",
-        from: "1 Sep",
-        to: "19 Sep",
-        isEmergency: false,
-
-    },
-
-    {
-        id: "WASA#20102",
-        from: "1 Sep",
-        to: "19 Sep",
-        isEmergency: true,
-
-    },
-    {
-        id: "WASA#20102",
-        from: "1 Sep",
-        to: "19 Sep",
-        isEmergency: false,
-
-    },
-
-],
+const conflictGroups = [
+    [ // Group 1
+        { id: "WASA#20102", from: "1 Sep", to: "19 Sep", isEmergency: false, geometry: { type: 'LineString', coordinates: [[90.41, 23.76], [90.42, 23.77]] } },
+        { id: "DESCO#50331", from: "5 Sep", to: "15 Sep", isEmergency: true, geometry: { type: 'LineString', coordinates: [[90.415, 23.765], [90.425, 23.775]] } },
+    ],
+    [ // Group 2
+        { id: "BTCL#10982", from: "8 Sep", to: "20 Sep", isEmergency: false, geometry: { type: 'LineString', coordinates: [[90.37, 23.78], [90.38, 23.79]] } },
+        { id: "RHD#88125", from: "10 Sep", to: "18 Sep", isEmergency: false, geometry: { type: 'LineString', coordinates: [[90.375, 23.785], [90.385, 23.795]] } },
+    ],
+    
+    [ // Group 3
+        { id: "DPDC#40119", from: "12 Sep", to: "25 Sep", isEmergency: true, geometry: { type: 'LineString', coordinates: [[90.39, 23.80], [90.40, 23.81]] } },
+        { id: "TITAS#70554", from: "14 Sep", to: "22 Sep", isEmergency: false, geometry: { type: 'LineString', coordinates: [[90.395, 23.805], [90.405, 23.815]] } },
+    ]
 ];
 
-export default function AuthorityWorkReqConflicted() {
+const CheckIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>;
+const MapPinIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg>;
+const XIcon = () => <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-5 h-5 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>;
+
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+    }
+};
+
+const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: 'spring', stiffness: 100 } }
+};
+
+
+export default function AuthorityWorkReqConflicted({ onShowMap }) {
     return (
-        <div className="flex flex-row mx-5 h-[calc(63vh)]">
-            <div className="flex flex-col">
-                <div className="grow bg-[rgb(248,250,252)] p-5 rounded-4xl">
-                    <div className="flex flex-col">
-                        <div className="flex flex-row justify-start items-center gap-2">
-                            <div className="w-4 h-4 rounded-full bg-red-500"></div>
-                            <p className="" style={{ fontSize: "1.8rem" }}>
-                                &nbsp; সাংঘর্ষিক রিপোর্ট
-                                  &nbsp;
-                                <span className="font-bold" style={{ color: "grey" }}>({conflicts.length})</span>
-                            </p>
-                        </div>
-                        <div className="flex flex-col mt-4 max-h-[calc(50vh)] scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-white scrollable-container overflow-y-auto"> {/*Scrollable div*/}
-                            {
-                                conflicts.map((item, idx) => {
-                                    return (
-                                        <motion.div
-                                            key={idx}
-                                            className="flex flex-col text-black my-2 mx-2 rounded-4xl w-[calc(30vw)] py-5 px-5 shadow-[4px_6px_20px_1px_rgba(0,0,0,0.25)] bg-[rgb(255,234,234)] backdrop-blur-md
-                                        "
-                                        >
-                                            <div className="flex flex-col rounded-2xl py-1 px-3 items-center justify-center bg-[rgb(246,235,255)]" ><span className="text-violet-600">RESOLVE</span></div>
-                                            <div className="mt-4"></div>
-
-                                            {
-                                                item.map((i, id) => {
-                                                    return(<>
-                                                    <div className="flex flex-row justify-between items-center">
-                                                
-                                                <p style={{ fontSize: '1.4rem' }}>{i.id}</p>
-                                                {i.isEmergency &&
-                                                    <motion.div className="bg-[rgb(252,210,220)] rounded-3xl px-3 py-1 text-center backdrop-blur-md font-bold "
-                                                    >
-                                                        <p style={{ color: 'red', fontSize: '0.7rem' }}>জরুরী</p>
-                                                    </motion.div>}
-                                            </div>
-                                        
-                                            <div className="mt-2"></div>
-                                            <div className="flex flex-row justify-between items-center">
-                                                <p style={{ fontSize: '1.2rem' }}>{i.from} - {i.to}</p>
-
-                                                <div className="flex flex-row justify-center">
-                                                    <motion.div
-                                                        className="w-8 h-8 rounded-lg bg-contain bg-center bg-no-repeat m-1"
-                                                        style={{ backgroundImage: `url(${rightLogo})` }}
-                                                        initial={{ backgroundColor: "#FFFFFF" }}
-                                                        whileHover={{ backgroundColor: "#E2FBD3", scale: 1.1 }}
-                                                        onClick={() => null}
-                                                    />
-                                                    <motion.div
-                                                        className="w-8 h-8 mr-1 rounded-lg bg-contain bg-center bg-no-repeat m-1"
-                                                        style={{ backgroundImage: `url(${pointLogo})` }}
-                                                        initial={{ backgroundColor: "#FFFFFF" }}
-                                                        whileHover={{ backgroundColor: "#E2FBD3", scale: 1.1 }}
-                                                        onClick={() => null}
-                                                    /*  ^^^^^^^^^^^ TODO FOR MAPS*/
-                                                    />
-                                                    <motion.div
-                                                        className="w-8 h-8 rounded-lg bg-contain bg-center bg-no-repeat m-1"
-                                                        style={{ backgroundImage: `url(${crossLogo})` }}
-                                                        initial={{ backgroundColor: "#FFFFFF" }}
-                                                        whileHover={{ backgroundColor: "#FFE4E4FF", scale: 1.1 }}
-                                                        onClick={() => null}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="mt-5"></div>
-                                                    </>)
-                                                })
-                                            }
-
-                                            
-                                            
-                                        </motion.div>
-                                    )
-                                })
-                            }
-                        </div>
-                    </div>
-
-                </div>
+       
+        <motion.div
+            className="bg-white rounded-2xl p-8 shadow-2xl w-full max-w-3xl mx-auto"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+            <div className="flex items-center mb-8">
+                <span className="w-3.5 h-3.5 bg-red-500 rounded-full mr-4 flex-shrink-0 shadow-md shadow-red-300"></span>
+                <h2 className="text-2xl font-bold text-gray-800">সাংঘর্ষিক রিপোর্ট ({conflictGroups.length})</h2>
             </div>
 
-        </div>
-    )
+            <motion.div
+                className="space-y-8 max-h-[65vh] overflow-y-auto pr-3"
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+            >
+               
+                <AnimatePresence>
+                    {conflictGroups.map((group, index) => (
+                        <motion.div
+                            key={index}
+                            className="bg-orange-50/50 rounded-xl border-l-4 border-orange-400 shadow-md transition-all duration-300 hover:shadow-xl hover:border-orange-500"
+                            variants={itemVariants}
+                            layout 
+                        >
+                            
+                            <div className="p-5 flex justify-between items-center border-b border-orange-200">
+                                <h3 className="font-bold text-lg text-orange-800">Conflict Group {index + 1}</h3>
+                                <motion.button 
+                                    className="bg-green-600 text-white font-bold py-2 px-5 rounded-lg shadow-sm hover:bg-green-700 transition-all"
+                                    whileHover={{ scale: 1.05, y: -2 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    মীমাংসা করুন
+                                </motion.button>
+                            </div>
+
+                         
+                            <div className="p-5 space-y-3">
+                                {group.map((item) => (
+                                    <div key={item.id} className="flex justify-between items-center bg-white p-4 rounded-lg shadow-sm">
+                                        
+                                        <div>
+                                            <div className="flex items-center gap-3">
+                                                <p className="font-bold text-gray-900 tracking-wide">{item.id}</p>
+                                                {item.isEmergency && (
+                                                    <span className="bg-red-100 text-red-800 text-xs font-bold px-3 py-1 rounded-full">জরুরী</span>
+                                                )}
+                                            </div>
+                                            <p className="text-sm text-gray-600 mt-1">{`${item.from} - ${item.to}`}</p>
+                                        </div>
+
+                                        
+                                        <div className="flex items-center gap-3">
+                                            <motion.button 
+                                                className="p-3 bg-green-600 rounded-lg shadow-sm hover:bg-green-700 transition-all" 
+                                                title="Approve"
+                                                whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }}
+                                            >
+                                                <CheckIcon />
+                                            </motion.button>
+                                            
+                                            <motion.button 
+                                                className="p-3 bg-green-600 rounded-lg shadow-sm hover:bg-green-700 transition-all"
+                                                title="Show on Map"
+                                                onClick={() => onShowMap(item)}
+                                                whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }}
+                                            >
+                                                <MapPinIcon />
+                                            </motion.button>
+
+                                            <motion.button 
+                                                className="p-3 bg-green-600 rounded-lg shadow-sm hover:bg-green-700 transition-all" 
+                                                title="Reject"
+                                                whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }}
+                                            >
+                                                <XIcon />
+                                            </motion.button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    ))}
+                </AnimatePresence>
+            </motion.div>
+        </motion.div>
+    );
 }

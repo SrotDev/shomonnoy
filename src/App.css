@@ -4,8 +4,12 @@
   padding: 0;
   box-sizing: border-box;
 } */
+
+
+
+
 .content-wrapper {
-  
+   padding-top: 7rem; 
   
 }
 html, body, #root {
@@ -63,3 +67,30 @@ footer {
   margin: 0 auto;
   z-index: 2;
 }
+
+::-webkit-scrollbar {
+  width: 8px; 
+}
+
+::-webkit-scrollbar-track {
+  background: #e5e7eb; 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #72C69E; 
+  border-radius: 10px;
+  border: 2px solid #e5e7eb; 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5da786; 
+}
+
+
+
+* {
+  scrollbar-width: thin; 
+  scrollbar-color: #72C69E #e5e7eb; 
+}
+
