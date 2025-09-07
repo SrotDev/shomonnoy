@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { AnimatePresence, easeInOut, motion } from "framer-motion"
 import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
@@ -8,19 +8,122 @@ import StakeholderDeclinedTask from "../components/stakeholderDeclinedTask";
 import StakeholderWaitingTask from "../components/stakeholderWaitingTask";
 import StakeholderProgressTask from "../components/stakeholderProgressTask";
 import StakeholderDoneTask from "../components/stakeholderDoneTask";
+import PreLoader2 from "./LoadingPage";
 
 
-
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 
 export default function StakeholderWorkReq() {
     const [select, setselect] = useState(0)
+    const [navState, setNavState] = useState("non_logged_in");
+    const [navName, setNavName] = useState("");
+    const [isLoading, setIsLoading] = useState(true)
+
+    const Navigate = useNavigate()
+
+    async function checkAvailablility() {
+        try {
+            console.log("request sent");
+            const response = await fetch(`${baseUrl}/`, { method: "GET" });
+
+            if (!response.ok) {
+                console.log("Backend not ready, status:", response.status);
+                return false;
+            }
+
+            // Only parse if response is ok
+            const data = await response.json();
+            console.log("Backend response:", data);
+            return true;
+        } catch (err) {
+            console.error("Error checking availability:", err);
+            return false;
+        }
+    }
+
+
+
+
+    useEffect(() => {
+        let intervalId;
+
+        async function pollAvailability() {
+            const available = await checkAvailablility();
+            if (available) {
+                var accessToken = localStorage.getItem('access_token');
+                if (accessToken) {
+
+                    const userInfo = await fetch(`${baseUrl}/profile/`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${accessToken}`,
+                        },
+
+                    });
+
+                    const userData = await userInfo.json()
+
+                    console.log(userData)
+                    if (!userInfo.ok) {
+                        console.log("Here")
+                        localStorage.removeItem("refresh_token");
+                        localStorage.removeItem("access_token")
+                        Navigate("/authenticate")
+                    } else {
+                        if (userData.role === "stakeholder") {
+                            setNavState("stakeholder_logged_in")
+                            setNavName(userData.name)
+                        } else {
+                            console.log("Here")
+                            localStorage.removeItem("refresh_token");
+                            localStorage.removeItem("access_token")
+                            Navigate("/authenticate")
+                        }
+
+
+                    }
+
+
+
+
+
+
+                } else {
+                    Navigate("/403")
+                }
+
+                setIsLoading(false)
+                if (intervalId) {
+                    clearInterval(intervalId);
+                }
+            }
+        }
+
+
+
+
+
+        pollAvailability();
+        intervalId = setInterval(pollAvailability, 5000);
+
+
+
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
+    }, []);
+
+
+
+    
 
     return (
         <>
-            <Navbar state="stakeholder_logged_in" />
+            <Navbar state={navState} name={navName} />
             <div className="flex flex-col">
-                <Navbar state="authority_logged_in" />
+
                 <motion.div
                     className="bg-[rgb(114,198,158)] px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold mt-30"
                     whileHover={{ backgroundColor: "rgba(70,200,70,1)" }}
@@ -42,7 +145,7 @@ export default function StakeholderWorkReq() {
                         }}
                         onClick={() => setselect(0)}
                     >
-                        <p>Planned
+                        <p>Admin Proposal
                         </p>
                     </motion.div>
                     <motion.div className=" bg-[rgb(114,198,158)] rounded-3xl px-10 py-2  text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
@@ -145,7 +248,7 @@ export default function StakeholderWorkReq() {
                     {
                         select === 5 && <StakeholderDoneTask />
                     }
-                    
+
                 </div>
 
 

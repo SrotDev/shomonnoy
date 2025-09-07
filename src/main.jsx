@@ -23,7 +23,7 @@ import Page404 from './pages/404Page.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <AuthorityConflictChart/>
+      <App/>
     </BrowserRouter>
   </StrictMode>,
 )

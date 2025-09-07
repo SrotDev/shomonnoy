@@ -1,9 +1,10 @@
-
-
 import React from 'react';
 import './NoticePage.css';
 import Navbar from '../../components/Navbar';
-
+import { Link, useNavigate } from "react-router-dom"
+import { easeInOut, motion, rgba } from "framer-motion"
+import { useState } from "react";
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const noticeData = [
   {
@@ -79,7 +80,17 @@ const noticeData = [
 ];
 
 
+
+
+
+
+
+
+
+
 function NoticePage ({state}) {
+  const [isLoading, setIsLoading] = useState(true)
+
   return (
     <div className="notice-page-wrapper">
       <Navbar state="user_logged_in" />

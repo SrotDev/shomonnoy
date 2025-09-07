@@ -5,6 +5,9 @@ import Typewriter from 'typewriter-effect/dist/core';
 import * as location from "../assets/1055-world-locations.json";
 import * as success from "../assets/1127-success.json";
 
+const baseUrl = "https://shomonnoy-backend.onrender.com/api";
+
+
 const defaultOptions1 = {
     loop: true,
     autoplay: true,
@@ -64,7 +67,7 @@ function PreLoader2() {
 
     return (
         <>
-            <div className="flex flex-col w-100vw h-full bg-blue-900 items-center justify-center"
+            <div className="flex flex-col w-screen h-screen bg-blue-900 items-center justify-center"
             >
                 <Lottie options={defaultOptions1} height={200} width={200} />
                 <span ref={textRef} ></span>

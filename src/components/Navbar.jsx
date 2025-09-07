@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { easeInOut, motion, rgba } from "framer-motion"
 import { useState } from "react";
 
@@ -23,8 +23,8 @@ const user_LoginItems = [
 
 const stakeHolder_LoginItems = [
     { id: 1, title: "হোম", path: "/stakeholder" },
-    { id: 2, title: "নোটিশ বোর্ড", path: "/stakeholder/noticeboard" },
-    { id: 3, title: "সচল রিপোর্টসমূহ", path: "/stakeholder/kanBanBoard" },
+    { id: 2, title: "নোটিশ বোর্ড", path: "/noticeboard" },
+    { id: 3, title: "সচল রিপোর্টসমূহ", path: "/stakeholder/pending-requests" },
     { id: 4, title: "নতুন রিপোর্ট তৈরী", path: "/stakeholder/requestWork" },
     { id: 5, title: "ফিডব্যাক", path: "/stakeholder/feedback" },
     { id: 6, title: "লগআউট", path: "/stakeholder/logout" }
@@ -37,13 +37,23 @@ const authority_LoginItems = [
     { id: 4, title: "সচল রিপোর্টসমূহ", path: "/authority/kanBanBoard" },
     { id: 5, title: "কনফ্লিক্ট চার্ট", path: "/authority/ganttChart" },
     { id: 6, title: "নতুন রিপোর্ট তৈরী", path: "/authority/request-work" },
-    
+
     { id: 7, "title": "মানচিত্র দেখুন", path: "/authority/map" },
     { id: 8, title: "লগআউট", path: "/authority/logout" }
 ]
 
 
-export default function Navbar({ state }) {
+
+function logOut() {
+    
+    // 1. Remove token/session
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("access_token")
+
+}
+
+export default function Navbar({ state, name }) {
+    const navigate = useNavigate();
 
     const formatText = (text) => {
         // Add spaces between letters
@@ -75,23 +85,71 @@ export default function Navbar({ state }) {
 
                 <div className="flex flex-row text-white py-5 px-10 gap-8"> {/* Navbar Links*/}
 
-                    {state === "non_logged_in" && non_LoginItems.map(item => (
-                        <motion.div key={item.id} className=""
-                            whileHover={{ scale: 1.1 }}
-                        >
-                            <Link className="navbar-link" to={item.path}>{item.title}</Link>
+                    {state === "non_logged_in" && non_LoginItems.map((item) => {
+                        if (item.path === "/authority/logout") {
+                            return (
+                                // <li key={item.id} onClick={logout}>
+                                //     {item.title}
+                                // </li>
+                                <motion.div key={item.id} className="cursor-pointer"
+                                    whileHover={{ scale: 1.1 }}
+                                    onClick={
+                                        () => {
+                                            logOut()
+                                            console.log("logged out")
+                                            navigate("/authenticate")
+                                        }
+                                    }
+                                >
+                                    {item.title}
 
-                        </motion.div>
-                    ))}
+                                </motion.div>
+                            );
+                        } else {
+                            return (
+                                <motion.div key={item.id} className=""
+                                    whileHover={{ scale: 1.1 }}
+                                >
+                                    <Link className="navbar-link" to={item.path}>{item.title}</Link>
 
-                    {state === "user_logged_in" && user_LoginItems.map(item => (
-                        <motion.div key={item.id} className=""
-                            whileHover={{ scale: 1.1 }}
-                        >
-                            <Link className="navbar-link" to={item.path}>{item.title}</Link>
+                                </motion.div>
+                            )
+                        }
 
-                        </motion.div>
-                    ))}
+
+                    })}
+
+                    {state === "user_logged_in" && user_LoginItems.map((item) => {
+                        if (item.path === "/logout") {
+                            return (
+                                // <li key={item.id} onClick={logout}>
+                                //     {item.title}
+                                // </li>
+                                <motion.div key={item.id} className="cursor-pointer font-bold"
+                                    whileHover={{ scale: 1.1 }}
+                                    onClick={
+                                        () => {
+                                            logOut()
+                                            console.log("logged out")
+                                            navigate("/authenticate")
+                                        }
+                                    }
+                                >
+                                    {item.title}
+
+                                </motion.div>
+                            );
+                        } else {
+                            return (
+                                <motion.div key={item.id} className=""
+                                    whileHover={{ scale: 1.1 }}
+                                >
+                                    <Link className="navbar-link" to={item.path}>{item.title}</Link>
+
+                                </motion.div>
+                            )
+                        }
+                    })}
 
                     {state === "stakeholder_logged_in" && stakeHolder_LoginItems.map(item => (
                         <motion.div key={item.id} className=""
@@ -120,7 +178,7 @@ export default function Navbar({ state }) {
                 }
 
                 {
-                    !(state === "non_logged_in") && <p className="font-bold"style={{color: "#64923D" }}>{formatText("Mumtio")}</p>
+                    !(state === "non_logged_in") && <p className="font-bold" style={{ color: "#64923D" }}>{formatText(name)}</p>
                 }
             </motion.div>
 

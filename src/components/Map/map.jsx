@@ -57,7 +57,7 @@ const mockRoadsData = [
   }
 ];
 
-const MapView = ({ requestData, isCompany = false }) => {
+const MapView = ({ requestData, isCompany = false, uuid=undefined }) => {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const highlightLayerRef = useRef(null);

@@ -1,22 +1,115 @@
 // src/pages/LandingPage.jsx
 import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from "react-router-dom"
 import './LandingPage.css';
 import Navbar from '../components/Navbar';
 import MapSidePanel from '../components/Map/MapSidePanel';
 
 import ViewOnlyMap from '../components/Map/ViewOnlyMap.jsx';
+import PreLoader2 from './LoadingPage.jsx';
+
+
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const LandingPage = () => {
   const [carPosition, setCarPosition] = useState(12);
   const [navState, setNavState] = useState("non_logged_in");
+  const [navName , setNavName] = useState("");
+  const [isLoading, setIsLoading] = useState(true)
+
+  const Navigate = useNavigate()
+
+  async function checkAvailablility() {
+    try {
+      console.log("request sent");
+      const response = await fetch(`${baseUrl}/`, { method: "GET" });
+
+      if (!response.ok) {
+        console.log("Backend not ready, status:", response.status);
+        return false;
+      }
+
+      // Only parse if response is ok
+      const data = await response.json();
+      console.log("Backend response:", data);
+      return true;
+    } catch (err) {
+      console.error("Error checking availability:", err);
+      return false;
+    }
+  }
+
+
+
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('access_token');
-    if (accessToken) {
-      setNavState("user_logged_in");
-    } else {
-      setNavState("non_logged_in");
+    let intervalId;
+
+    async function pollAvailability() {
+      const available = await checkAvailablility();
+      if (available) {
+        var accessToken = localStorage.getItem('access_token');
+        if (accessToken) {
+
+          const userInfo = await fetch(`${baseUrl}/profile/`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${accessToken}`,
+            },
+
+          });
+
+          const userData = await userInfo.json()
+          if (!userInfo.ok) {
+            console.log("Here")
+            localStorage.removeItem("refresh_token");
+            localStorage.removeItem("access_token")
+            Navigate("/authenticate")
+          }else{
+            if(userData.role === "citizen"){
+              setNavState("user_logged_in");
+              
+            }else if (userData.role === "stakeholder"){
+              setNavState("stakeholder_logged_in")
+            }else {
+              setNavState("authority_logged_in")
+            }
+
+            setNavName(userData.name)
+          }
+
+          
+
+          
+
+
+        } else {
+          setNavState("non_logged_in");
+          setNavName("Login")
+        }
+
+        setIsLoading(false)
+        if (intervalId) {
+          clearInterval(intervalId);
+        }
+      }
     }
+
+    async function getUserRole(accessToken) {
+
+    }
+
+
+
+    pollAvailability();
+    intervalId = setInterval(pollAvailability, 5000);
+
+
+
+    return () => {
+      if (intervalId) clearInterval(intervalId);
+    };
   }, []);
 
   useEffect(() => {
@@ -36,14 +129,18 @@ const LandingPage = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  if (isLoading) {
+    return <PreLoader2 />
+  }
+
   return (
     <>
-      <Navbar state={navState} />
+      <Navbar state={navState} name={navName}/>
       <div className="landing-page-wrapper">
         <div className="landing-hero-section">
           <h1 className="landing-title">সমন্বয়</h1>
           <div className="scene-container">
-        
+
             <div className="cloud-left"><svg viewBox="0 0 120 40" className="cloud-shape"><path d="M10 40 Q0 40 0 30 T10 20 Q10 10 20 10 T40 10 Q60 10 70 20 T90 20 Q110 20 110 30 T90 40 Z" fill="#F0F8FF" /></svg><div className="rain"></div></div>
             <div className="cloud-right"><svg viewBox="0 0 120 40" className="cloud-shape"><path d="M10 40 Q0 40 0 30 T10 20 Q10 10 20 10 T40 10 Q60 10 70 20 T90 20 Q110 20 110 30 T90 40 Z" fill="#F0F8FF" /></svg><div className="rain"></div></div>
             <svg viewBox="0 0 1440 600" className="road"><path d="M -10,300 C 360,400 360,200 720,300 S 1080,400 1450,300 L 1450,500 C 1080,600 360,400 -10,500 Z" fill="#6B7280" /><path d="M -10 100 Q 720 -100, 1450 100 L 1450 310 C 1080 410, 1080 210, 720 310 S 360 410, -10 310 Z" fill="#4B5563" /><path d="M -10 100 Q 720 -100, 1450 100 L 1450 300 C 1080 400, 1080 200, 720 300 S 360 400, -10 300 Z" fill="#6B7280" /><path d="M -10 100 Q 720 -100, 1450 100" stroke="#FDE68A" strokeWidth="6" fill="none" strokeDasharray="60 30" /></svg>
@@ -55,7 +152,7 @@ const LandingPage = () => {
         </div>
 
         <div className="scrollable-content">
-       
+
           <h2>שহরের উন্নয়নে এক নতুন দৃষ্টিভঙ্গি</h2>
           <p>সমন্বয় একটি যুগান্তকারী প্ল্যাটফর্ম যা নাগরিক, কর্তৃপক্ষ (যেমন সিটি কর্পোরেশন) এবং স্টেকহোল্ডারদের (যেমন ওয়াসা, ডেসকো) একত্রিত করে সকল প্রকার উন্নয়নমূলক কাজ স্বচ্ছতা ও দক্ষতার সাথে পরিচালনা করে।</p>
           <div className="features">
@@ -67,7 +164,7 @@ const LandingPage = () => {
             <div className="feature-card"><div className="feature-card-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" /></svg></div><h3>স্বচ্ছ যোগাযোগ</h3><p>প্রকল্পের অবস্থা সম্পর্কে রিয়েল-টাইম নোটিফিকেশন পান এবং কাজের উপর মতামত দিন।</p></div>
           </div>
         </div>
-        
+
         <div className="map-section-container">
           <div className="map-side-panel">
             <div className="mt-20">
@@ -86,7 +183,7 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="map-display-area">
-           
+
             <ViewOnlyMap />
           </div>
         </div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import '../css/authentication.css'
 import PreLoader2 from "./LoadingPage";
 
-const baseUrl = "https://shomonnoy-backend.onrender.com/api";
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 export default function Authentication() {
 
@@ -39,25 +39,25 @@ export default function Authentication() {
     };
 
     async function checkAvailablility() {
-        
         try {
-            console.log("request sent")
-            const response = await fetch(`${baseurl}/`, {
-                method: "GET",
-                
-            });
+            console.log("request sent");
+            const response = await fetch(`${baseUrl}/`, { method: "GET" });
 
-            console.log("ahis")
-            const data = await response.json();
             if (!response.ok) {
-                console.log("holona")
+                console.log("Backend not ready, status:", response.status);
                 return false;
             }
+
+            // Only parse if response is ok
+            const data = await response.json();
+            console.log("Backend response:", data);
             return true;
         } catch (err) {
+            console.error("Error checking availability:", err);
             return false;
         }
     }
+
 
 
     async function handleLogin() {
@@ -88,14 +88,18 @@ export default function Authentication() {
                 setLoginError(data.message || 'লগইন ব্যর্থ হয়েছে');
                 return;
             }
-            // Save tokens
+
+
+
             if (data.refresh) localStorage.setItem('refresh_token', data.refresh);
             if (data.access) localStorage.setItem('access_token', data.access);
-            // Navigate based on role
+
+            
+
             if (data.role === 'authority') {
                 navigate('/authority');
             } else if (data.role === 'stakeholder') {
-                navigate('/stakeholder-dashboard');
+                navigate('/stakeholder');
             } else {
                 navigate('/');
             }
@@ -130,6 +134,8 @@ export default function Authentication() {
                 organization: regOrganization
             };
         }
+
+        console.log(formData)
         try {
             const response = await fetch(`${baseUrl}/auth/register/`, {
                 method: 'POST',
@@ -162,24 +168,23 @@ export default function Authentication() {
         async function pollAvailability() {
             const available = await checkAvailablility();
             if (available) {
-                
                 setIsLoading(false);
-                clearInterval(intervalId); // stop polling once available
+                if (intervalId) {
+                    clearInterval(intervalId);
+                }
             }
         }
 
-        
-        pollAvailability();
 
-        
+        pollAvailability();
         intervalId = setInterval(pollAvailability, 5000);
 
-        return () => clearInterval(intervalId);
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
     }, []);
 
-    if (isLoading) {
-        return <PreLoader2 />;
-    }
+
 
 
 
