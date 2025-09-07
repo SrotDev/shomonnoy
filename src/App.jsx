@@ -45,6 +45,8 @@ function App() {
             }
           />
 
+          <Route path="/stakeholder/requestWork" element={<RequestWorkPage />}></Route>
+
           
 
         </Routes>
