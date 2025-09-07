@@ -41,6 +41,8 @@ function App() {
               )
             }
           />
+
+          <Route path="/stakeholder/requestWork" element={<RequestWorkPage />}></Route>
         
         <Route path="/authenticate" element={<Authentication/>}/>
 

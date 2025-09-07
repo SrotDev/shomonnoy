@@ -10,14 +10,20 @@ import AuthorityConflictChart from './pages/authorityConflictChart.jsx'
 import StakeholderDashboard from './pages/stakeholderDashboard.jsx'
 import ReportProblem from './pages/ReportProblem.jsx'
 import StakeholderWorkReq from './pages/stakeholderWorkReq.jsx'
-import StakeholderNewReq from './pages/stakeholderNewReq.jsx'
+import StakeholderPlannedTask from './components/stakeholderPlannedTask.jsx'
+import StakeholderProgressTask from './components/stakeholderProgressTask.jsx'
+import StakeholderProposedTask from './components/stakeholderProposedTask.jsx'
+import StakeholderWaitingTask from './components/stakeholderWaitingTask.jsx'
+import RequestWorkPage from './pages/RequestWorkPage.jsx'
+import LandingPage from './pages/LandingPage.jsx'
+//import StakeholderNewReq from './pages/stakeholderNewReq.jsx'
 import PreLoader2 from './pages/LoadingPage.jsx'
 import Page404 from './pages/404Page.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <Authentication />
+      <AuthorityConflictChart/>
     </BrowserRouter>
   </StrictMode>,
 )

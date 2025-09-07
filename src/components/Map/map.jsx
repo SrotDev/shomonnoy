@@ -1,16 +1,13 @@
-// src/components/Map/MapView.jsx - FINAL CORRECTED VERSION
-
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
-import './map.css'; // Use the simplified CSS for the map view
+import './map.css';
 
 import 'leaflet-control-geocoder';
 import 'leaflet-draw';
-
 
 import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -23,9 +20,47 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-const MapView = ({ isCompany = true }) => {
+
+const mockRoadsData = [
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Mirpur Road Repair",
+      "company": "WASA",
+      "status": "Ongoing", 
+      "timeline": "1 Oct - 30 Oct",
+      "reason": "Main pipeline maintenance"
+    },
+    "geometry": { "type": "LineString", "coordinates": [[90.365, 23.775], [90.375, 23.785]] }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Gulshan Avenue Paving",
+      "company": "RHD",
+      "status": "Planned", 
+      "timeline": "1 Nov - 15 Nov",
+      "reason": "Road resurfacing project"
+    },
+    "geometry": { "type": "LineString", "coordinates": [[90.41, 23.79], [90.42, 23.80]] }
+  },
+  {
+    "type": "Feature",
+    "properties": {
+      "name": "Dhanmondi Cable Work",
+      "company": "BTCL",
+      "status": "Completed", 
+      "timeline": "1 Sep - 25 Sep",
+      "reason": "Fiber optic cable installation"
+    },
+    "geometry": { "type": "LineString", "coordinates": [[90.37, 23.74], [90.38, 23.75]] }
+  }
+];
+
+const MapView = ({ requestData, isCompany = false }) => {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const highlightLayerRef = useRef(null);
   const [drawnGeometry, setDrawnGeometry] = useState(null);
   const [showRequestForm, setShowRequestForm] = useState(false);
 
@@ -42,42 +77,22 @@ const MapView = ({ isCompany = true }) => {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
 
+   
     L.control.zoom({ position: 'bottomleft' }).addTo(map);
     L.control.attribution({ position: 'bottomright' }).addTo(map);
-    
-    const geocoder = L.Control.geocoder({ defaultMarkGeocode: true, position: 'bottomleft' });
+    const geocoder = L.Control.geocoder({ defaultMarkGeocode: true, position: 'bottomleft' }).addTo(map);
     geocoder.on('markgeocode', (e) => map.panTo(e.geocode.center));
-    geocoder.addTo(map);
-
-    if (isCompany) {
-      const drawControl = new L.Control.Draw({
-        position: 'bottomright',
-        draw: { polyline: true, polygon: false, rectangle: false, circle: false, marker: false, circlemarker: false },
-        edit: false,
-      });
-      map.addControl(drawControl);
-
-      map.on('draw:created', (e) => {
-        const layer = e.layer;
-        const latlngs = layer.getLatLngs();
-        const coordinates = latlngs.map(p => [p.lng, p.lat]);
-        setDrawnGeometry({ type: 'LineString', coordinates });
-        setShowRequestForm(true);
-      });
-    }
 
     const drawRoad = (feature) => {
       const props = feature.properties;
+      const color =
+        props.status === 'Ongoing' ? '#ef4444' :
+          props.status === 'Completed' ? '#22c55e' :
+            props.status === 'Planned' ? '#f97316' :
+              '#888888';
 
-      // FIX: This logic correctly colors lines based on their STATUS to match the 3-color legend.
-      const color = 
-        props.status === 'Ongoing' ? '#ef4444' :   // Red
-        props.status === 'Completed' ? '#22c55e' : // Green
-        props.status === 'Planned' ? '#f97316' :   // Orange
-        '#888888'; // A neutral grey for any data without a valid status
-
-      const lineLayer = L.geoJSON(feature, { 
-        style: { color, weight: 8, opacity: 0.85, lineCap: 'round', lineJoin: 'round' } 
+      const lineLayer = L.geoJSON(feature, {
+        style: { color, weight: 8, opacity: 0.85, lineCap: 'round', lineJoin: 'round' }
       }).addTo(map);
 
       lineLayer.on('click', () => {
@@ -94,71 +109,63 @@ const MapView = ({ isCompany = true }) => {
       });
     };
 
-    fetch('http://localhost:5000/api/roads')
-      .then(res => res.json())
-      .then(geojson => geojson.features.forEach(drawRoad))
-      .catch(err => console.error('❌ Error loading roads:', err));
-      
-    return () => { map.remove(); mapInstanceRef.current = null; };
+    
+    mockRoadsData.forEach(drawRoad);
+
+    
+    return () => { if (map) { map.remove(); mapInstanceRef.current = null; } };
   }, [isCompany]);
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const payload = {
-      name: formData.get('name'),
-      company: formData.get('company'),
-      status: formData.get('status'),
-      timeline: `${formData.get('start_date')} to ${formData.get('end_date')}`,
-      reason: formData.get('reason'),
-      geometry: drawnGeometry,
-    };
+  
+  useEffect(() => {
+    const map = mapInstanceRef.current;
+    if (!map) return;
 
-    fetch('http://localhost:5000/api/road_requests', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    })
-      .then(res => res.json())
-      .then(data => {
-        alert('✅ Request submitted successfully!');
-        setShowRequestForm(false);
-        setDrawnGeometry(null);
-        window.location.reload();
-      })
-      .catch(err => alert('❌ Submission failed.'));
-  };
+    if (highlightLayerRef.current) {
+      map.removeLayer(highlightLayerRef.current);
+    }
 
+    if (requestData && requestData.geometry) {
+      const geoJsonFeature = {
+        "type": "Feature",
+        "properties": { ...requestData },
+        "geometry": requestData.geometry
+      };
+
+      const requestLayer = L.geoJSON(geoJsonFeature, {
+        style: {
+          color: '#3b82f6',
+          weight: 10,
+          opacity: 0.9,
+        }
+      }).addTo(map);
+
+      requestLayer.on('click', () => {
+        const props = geoJsonFeature.properties;
+        const popupContent = `
+          <div class="map-popup selected-popup">
+            <h3>Selected: ${props.id || 'N/A'}</h3>
+            <p><strong>Timeline:</strong> ${props.from || ''} - ${props.to || ''}</p>
+            ${props.isEmergency ? '<p><strong class="emergency">This is an emergency request.</strong></p>' : ''}
+          </div>
+        `;
+        L.popup()
+          .setLatLng(requestLayer.getBounds().getCenter())
+          .setContent(popupContent)
+          .openOn(map);
+      });
+      
+
+      highlightLayerRef.current = requestLayer;
+      map.flyToBounds(requestLayer.getBounds(), { padding: [50, 50] });
+    }
+  }, [requestData]);
+
+  
   return (
     <>
       <div className="map-view-container" ref={mapContainerRef} />
       
-      {showRequestForm && (
-        <div className="map-modal-overlay">
-          <div className="map-modal-content">
-            <h2>🚧 Submit Road Work Request</h2>
-            <form onSubmit={handleFormSubmit}>
-              <div className="form-group"><label>Road Name</label><input type="text" name="name" required /></div>
-              <div className="form-group"><label>Company</label><input type="text" name="company" required /></div>
-              <div className="form-row">
-                <div className="form-group"><label>Start Date</label><input type="date" name="start_date" required /></div>
-                <div className="form-group"><label>End Date</label><input type="date" name="end_date" required /></div>
-              </div>
-              <div className="form-group"><label>Status</label>
-                <select name="status" required>
-                  <option value="Planned">Planned</option>
-                  <option value="Ongoing">Ongoing</option>
-                </select>
-              </div>
-              <div className="form-group"><label>Reason for Work</label><textarea name="reason" required rows="3" /></div>
-              <div className="form-actions">
-                <button type="button" className="btn-cancel" onClick={() => setShowRequestForm(false)}>Cancel</button>
-                <button type="submit" className="btn-submit">Submit Request</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </>
   );
 };

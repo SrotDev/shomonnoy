@@ -1,96 +1,123 @@
-import { Link } from "react-router-dom"
-import { AnimatePresence, easeInOut, motion } from "framer-motion"
-import '../css/authentication.css'
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+
+
+import '../css/authentication.css';
+import '../css/authorityDashboard.css';
+
+
 import Navbar from "../components/Navbar";
-import { useState, useEffect } from "react";
 import AuthorityWorkReqNormal from "../components/authorityWorkReqNormal";
 import AuthorityWorkReqConflicted from "../components/authorityWorkReqConflict";
 import AuthorityWorkReqPending from "../components/authorityWorkReqPending";
+import MapView from "../components/Map/map";
 
 export default function AuthorityWorkRequests() {
     const [optState, setOptState] = useState(0);
+    const [isMapVisible, setIsMapVisible] = useState(false);
+   
+    const [selectedRequest, setSelectedRequest] = useState(null);
+
+   
+    const handleShowMap = (requestData) => {
+        setSelectedRequest(requestData); 
+        setIsMapVisible(true);       
+    };
+
+    const handleCloseMap = () => {
+        setIsMapVisible(false);
+        setSelectedRequest(null); 
+    };
+    
+ 
+    const modalVariants = {
+        hidden: { opacity: 0, scale: 0.9 },
+        visible: { opacity: 1, scale: 1 },
+        exit: { opacity: 0, scale: 0.9 }
+    };
 
     return (
         <>
-            <div className="flex flex-col">
+            <div className={`flex flex-col min-h-screen transition-filter duration-300 ${isMapVisible ? 'blur-sm' : ''}`}>
                 <Navbar state="authority_logged_in" />
-                <motion.div
-                    className="bg-[rgb(114,198,158)] px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold mt-30"
-                    whileHover={{ backgroundColor: "rgba(70,200,70,1)" }}
-                >
+                <motion.div className="bg-[#72C69E] px-14 py-2 text-white text-center shadow-lg backdrop-blur-md font-bold mt-30">
                     সচল রিপোর্টসমূহ
                 </motion.div>
 
-
-                <div className="flex flex-row gap-10 items-center justify-center mt-8">
-                    <motion.div className="bg-[rgb(114,198,158)]  rounded-3xl px-8 py-2  text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
-                        whileHover={{
-                            scale: 1.1,
-                            backgroundColor: "rgba(70,200,70,1)",
-                            color: "rgba(241,255,238,1)"
-                        }}
-                        animate={{
-                            backgroundColor: optState === 0 ? '#72C69E' : '#F1FFEE',
-                            color: optState === 0 ? '#F1FFEE' : '#72C69E'
-                        }}
+                <div className="flex flex-row gap-5 items-center justify-center mt-8">
+                    <motion.div className="bg-white rounded-full px-8 py-2 text-center shadow-md font-bold cursor-pointer"
+                        whileHover={{ scale: 1.05 }}
+                        animate={{ backgroundColor: optState === 0 ? '#72C69E' : '#FFFFFF', color: optState === 0 ? '#FFFFFF' : '#333333' }}
                         onClick={() => setOptState(0)}
                     >
-                        <p>সাধারণ
-                        </p>
+                        <p>সাধারণ</p>
                     </motion.div>
-                    <motion.div className=" bg-[rgb(114,198,158)] rounded-3xl px-10 py-2  text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
-                        whileHover={{
-                            scale: 1.1,
-                            backgroundColor: "rgba(70,200,70,1)",
-                            color: "rgba(241,255,238,1)"
-                        }}
-                        animate={{
-                            backgroundColor: optState === 1 ? '#72C69E' : '#F1FFEE',
-                            color: optState === 1 ? '#F1FFEE' : '#72C69E'
-
-                        }}
-
+                    <motion.div className="bg-white rounded-full px-10 py-2 text-center shadow-md font-bold cursor-pointer"
+                        whileHover={{ scale: 1.05 }}
+                        animate={{ backgroundColor: optState === 1 ? '#72C69E' : '#FFFFFF', color: optState === 1 ? '#FFFFFF' : '#333333' }}
                         onClick={() => setOptState(1)}
                     >
-                        <p>সাংঘর্ষিক</p> 
+                        <p>সাংঘর্ষিক</p>
                     </motion.div>
-                    <motion.div className="bg-[rgb(114,198,158)] rounded-3xl px-5 py-2 text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
-                        whileHover={{
-                            scale: 1.1,
-                            backgroundColor: "rgba(70,200,70,1)",
-                            color: "rgba(241,255,238,1)"
-                        }}
-                        animate={{
-                            backgroundColor: optState === 2 ? '#72C69E' : '#F1FFEE',
-                            color: optState === 2 ? '#F1FFEE' : '#72C69E'
-                        }}
+                    <motion.div className="bg-white rounded-full px-5 py-2 text-center shadow-md font-bold cursor-pointer"
+                        whileHover={{ scale: 1.05 }}
+                        animate={{ backgroundColor: optState === 2 ? '#72C69E' : '#FFFFFF', color: optState === 2 ? '#FFFFFF' : '#333333' }}
                         onClick={() => setOptState(2)}
                     >
                         <p>পুনঃনিরীক্ষণ আবেদনসমূহ</p>
                     </motion.div>
-
-
-                    
-                </div>
-                <div className="flex flex-row">
-                        <div className="my-10 ml-10"> {/*content*/}
-                            {
-                                optState === 0 && <AuthorityWorkReqNormal/>
-                            }
-                            {
-                                optState === 1 && <AuthorityWorkReqConflicted />
-                            }
-                            {
-                                optState === 2 && <AuthorityWorkReqPending />
-                            }
-                        </div>
-                        <div>
-                            {/* TODO ADD MAP HERE */}
-                        </div>
                 </div>
                 
+              
+                <div className="my-10 mx-auto w-full max-w-4xl">
+                   
+                    {optState === 0 && <AuthorityWorkReqNormal onShowMap={handleShowMap} />}
+                    {optState === 1 && <AuthorityWorkReqConflicted onShowMap={handleShowMap} />}
+                    {optState === 2 && <AuthorityWorkReqPending onShowMap={handleShowMap} />}
+                </div>
             </div>
 
+
+           // In AuthorityWorkRequests.js
+
+            <AnimatePresence>
+                {isMapVisible && (
+                    <motion.div
+                        
+                        className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+                        initial="hidden" animate="visible" exit="exit"
+                        variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 }, exit: { opacity: 0 } }}
+                        onClick={handleCloseMap} 
+                    >
+                        <motion.div
+                           
+                            className="relative bg-white rounded-lg shadow-2xl w-[95vw] md:w-[90vw] h-[90vh] overflow-hidden p-2"
+                            onClick={(e) => e.stopPropagation()} 
+                            
+                            variants={{
+                                hidden: { opacity: 0, y: -20, scale: 0.95 },
+                                visible: { opacity: 1, y: 0, scale: 1 },
+                                exit: { opacity: 0, y: -20, scale: 0.95 }
+                            }}
+                            transition={{ duration: 0.3 }}
+                        >
+                             <button 
+                                className="absolute top-4 right-4 text-gray-600 bg-white bg-opacity-70 rounded-full p-2 z-[1000] hover:bg-gray-100 hover:text-gray-900 transition-colors" 
+                                onClick={handleCloseMap}
+                             >
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                             </button>
+                             
+                             <MapView requestData={selectedRequest} />
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </>
-    )
+    );
 }
+
+
+

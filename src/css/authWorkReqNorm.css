@@ -1,67 +1,146 @@
-.scrollbar-thin::-webkit-scrollbar {
-  width: 8px;
+/* Using a modern font, add this to your main index.css or App.css if you haven't already */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --font-main: 'Inter', sans-serif;
+  
+
+  --bg-main: hsl(220, 20%, 96%);
+  --bg-container: hsl(220, 25%, 98%);
+  --card-bg: hsla(0, 0%, 100%, 0.6);
+  --card-border: hsla(0, 0%, 100%, 0.8);
+  --shadow-color: 220, 40%, 80%; 
+  
+  --text-primary: hsl(220, 25%, 20%);
+  --text-secondary: hsl(220, 15%, 50%);
+  
+
+  --status-planned: hsl(38, 95%, 58%);
+  --status-progress: hsl(212, 92%, 58%);
+  --status-done: hsl(145, 63%, 49%);
+  --status-proposed: hsl(48, 95%, 65%);
+  --status-authorized: hsl(265, 70%, 60%);
+  --status-declined: hsl(0, 84%, 60%);
+  --status-emergency: hsl(0, 100%, 50%);
 }
 
-.scrollbar-track-white::-webkit-scrollbar-track {
-  background: white;
-  border-radius: 10px;
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-main); 
 }
 
-.scrollbar-thumb-gray-400::-webkit-scrollbar-thumb {
-  background: #9ca3af;
-  border-radius: 10px;
+
+.tasks-container {
+    background-color: var(--bg-container);
+    border-radius: 2rem;
+    padding: 1.5rem;
+    box-shadow: 0 20px 40px -15px rgba(var(--shadow-color), 0.5);
+    height: 100%;
+    width: 100%;
 }
 
-.scrollbar-thumb-gray-400::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+.tasks-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
 }
 
-/* Bouncing scroll physics */
-.scrollable-container {
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  overscroll-behavior: contain;
+.tasks-header p {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
 }
 
-@supports (-webkit-overflow-scrolling: touch) {
-  .scrollable-container {
-    -webkit-overflow-scrolling: touch;
-    overflow-scrolling: touch;
-  }
+.tasks-header .task-count {
+    font-weight: 500;
+    color: var(--text-secondary);
 }
 
-/* Alternative scrollbar styling for Firefox */
-.scrollable-container {
-  scrollbar-width: thin;
-  scrollbar-color: #9ca3af white;
+.task-list {
+    max-height: calc(50vh);
+    overflow-y: auto;
+    padding-right: 0.5rem;
 }
 
-/* Custom scrollbar for better cross-browser support */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 8px;
+
+.task-card {
+    position: relative;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+    box-shadow: 0 10px 25px -10px rgba(var(--shadow-color), 0.4);
+    overflow: hidden;
+    cursor: pointer;
 }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: white;
-  border-radius: 10px;
-  margin: 4px;
+.task-card-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 6px;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #9ca3af;
-  border-radius: 10px;
-  transition: background-color 0.2s ease;
+.task-card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #6b7280;
+.task-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 }
 
-/* For Firefox */
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: #9ca3af white;
-  scroll-behavior: smooth;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
+.task-id {
+    font-size: 1.2rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.task-date {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.task-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+
+.emergency-indicator {
+    background-color: hsla(0, 100%, 50%, 0.1);
+    color: var(--status-emergency);
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.emergency-pulse {
+    width: 8px;
+    height: 8px;
+    background-color: var(--status-emergency);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.9); box-shadow: 0 0 0 0 hsla(0, 100%, 50%, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 8px hsla(0, 100%, 50%, 0); }
+    100% { transform: scale(0.9); box-shadow: 0 0 0 0 hsla(0, 100%, 50%, 0); }
 }

@@ -1,12 +1,11 @@
-/* src/components/Map/MapView.css - FINAL THEME (No Side Panel) */
 
-/* This container will hold the map and fill its parent */
 .map-view-container {
   width: 100%;
   height: 100%;
+  border-radius: 8px; 
 }
 
-/* Customizing Leaflet Controls for Light Theme */
+
 .leaflet-control-zoom-in, .leaflet-control-zoom-out, .leaflet-control-geocoder-icon, .leaflet-draw-draw-polyline {
   background-color: #ffffff !important;
   color: #333333 !important;
@@ -20,26 +19,75 @@
   border: 1px solid #cccccc !important; 
 }
 
-/* Custom Popup Styling */
+
 .map-popup { font-family: 'Poppins', sans-serif; }
 .map-popup h3 { margin: 0 0 10px 0; font-size: 1.2rem; }
 .map-popup p { margin: 4px 0; }
 .map-popup .status-planned { color: #f97316; font-weight: bold; }
 .map-popup .status-ongoing { color: #ef4444; font-weight: bold; }
 .map-popup .status-completed { color: #22c55e; font-weight: bold; }
+.selected-popup h3 { color: #3b82f6; }
+.emergency { color: #dc2626; font-weight: 700; }
 
-/* Modal Styles */
-.map-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 2000; backdrop-filter: blur(4px); }
-.map-modal-content { background: #ffffff; padding: 30px; border-radius: 12px; width: 90%; max-width: 480px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
-.map-modal-content h2 { margin-top: 0; margin-bottom: 20px; color: #333; }
-.map-modal-content .form-group { margin-bottom: 15px; }
-.map-modal-content .form-row { display: flex; gap: 15px; }
-.map-modal-content .form-row .form-group { flex: 1; }
-.map-modal-content label { display: block; margin-bottom: 5px; font-weight: 600; color: #555; font-size: 0.9rem; }
-.map-modal-content input, .map-modal-content textarea, .map-modal-content select { width: 100%; padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; box-sizing: border-box; }
-.map-modal-content .form-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
-.map-modal-content button { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 1rem; transition: all 0.2s ease; }
-.map-modal-content .btn-submit { background-color: #1e88e5; color: white; }
-.map-modal-content .btn-submit:hover { background-color: #1565c0; }
-.map-modal-content .btn-cancel { background-color: #e0e0e0; color: #333; }
-.map-modal-content .btn-cancel:hover { background-color: #bdbdbd; }
+
+.map-modal-overlay { 
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  background-color: rgba(0, 0, 0, 0.6); 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  z-index: 2000; 
+  backdrop-filter: blur(4px); 
+}
+
+.map-modal-content { 
+  background: #f8fafc; 
+  padding: 20px; 
+  border-radius: 12px; 
+  width: 85vw; 
+  height: 80vh;
+  max-width: 1200px; 
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); 
+  display: flex;
+  flex-direction: column; 
+}
+
+.map-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px; 
+  flex-shrink: 0; 
+}
+
+.map-modal-header h2 {
+  margin: 0;
+  color: #1e293b; 
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.map-modal-header .task-id-highlight {
+  color: #2563eb; 
+}
+
+.map-modal-header .close-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  width: 36px;
+  height: 36px;
+}
+
+
+.map-modal-body {
+  flex-grow: 1;
+  width: 100%;
+  height: 100%;
+  overflow: hidden; 
+}
