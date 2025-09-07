@@ -1,11 +1,16 @@
 import { Link, useNavigate } from "react-router-dom"
 import { AnimatePresence, easeInOut, motion } from "framer-motion"
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import '../css/authentication.css'
+import PreLoader2 from "./LoadingPage";
 
-const baseUrl = "http://10.66.25.105:8000/api"; // Change this to your actual API base URL
+const baseUrl = "https://shomonnoy-backend.onrender.com/api";
 
 export default function Authentication() {
+
+    const [isLoading, setIsLoading] = useState(true)
+
+
     const navigate = useNavigate();
 
     const [isLogin, setIsLogin] = useState(true);
@@ -33,9 +38,31 @@ export default function Authentication() {
         hover: { backgroundColor: 'lightgrey' },
     };
 
+    async function checkAvailablility() {
+        
+        try {
+            console.log("request sent")
+            const response = await fetch(`${baseurl}/`, {
+                method: "GET",
+                
+            });
+
+            console.log("ahis")
+            const data = await response.json();
+            if (!response.ok) {
+                console.log("holona")
+                return false;
+            }
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
+
+
     async function handleLogin() {
         setLoginError("");
-        // Validate inputs
+
         if (!email) {
             setLoginError("ইমেইল প্রদান করুন");
             return;
@@ -77,7 +104,7 @@ export default function Authentication() {
         }
     }
 
-    // Registration POST fetch function
+
     async function handleRegister() {
         setRegisterError("");
         let formData = {};
@@ -114,7 +141,7 @@ export default function Authentication() {
             const data = await response.json();
             if (!response.ok) {
                 throw new Error(data.message || 'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
-            }else{
+            } else {
                 setPassword(regPassword);
                 setEmail(regEmail);
                 setRole(regRole)
@@ -129,19 +156,41 @@ export default function Authentication() {
     }
 
 
+    useEffect(() => {
+        let intervalId;
 
-    function mobileCheck(value) {
-
-        const cleaned = value.replace(/\D/g, "");
-
-        if (cleaned.length === 0) {
-            setMobileError("");
-        } else if (!/^[0-9]{11}$/.test(cleaned)) {
-            setMobileError("মোবাইল নম্বর ইংরেজিতে ১১ ডিজিট হতে হবে ");
-        } else {
-            setMobileError("");
+        async function pollAvailability() {
+            const available = await checkAvailablility();
+            if (available) {
+                
+                setIsLoading(false);
+                clearInterval(intervalId); // stop polling once available
+            }
         }
+
+        
+        pollAvailability();
+
+        
+        intervalId = setInterval(pollAvailability, 5000);
+
+        return () => clearInterval(intervalId);
+    }, []);
+
+    if (isLoading) {
+        return <PreLoader2 />;
     }
+
+
+
+
+
+    if (isLoading) {
+        return (
+            <PreLoader2 />
+        )
+    }
+
 
 
     return (

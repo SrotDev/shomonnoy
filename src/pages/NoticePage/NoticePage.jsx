@@ -2,6 +2,7 @@
 
 import React from 'react';
 import './NoticePage.css';
+import Navbar from '../../components/Navbar';
 
 
 const noticeData = [
@@ -78,9 +79,10 @@ const noticeData = [
 ];
 
 
-const NoticePage = () => {
+function NoticePage ({state}) {
   return (
     <div className="notice-page-wrapper">
+      <Navbar state="user_logged_in" />
       <div className="blob blob-1"></div>
       <div className="blob blob-2"></div>
       <div className="blob blob-3"></div>

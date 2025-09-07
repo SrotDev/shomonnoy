@@ -11,11 +11,13 @@ import StakeholderDashboard from './pages/stakeholderDashboard.jsx'
 import ReportProblem from './pages/ReportProblem.jsx'
 import StakeholderWorkReq from './pages/stakeholderWorkReq.jsx'
 import StakeholderNewReq from './pages/stakeholderNewReq.jsx'
+import PreLoader2 from './pages/LoadingPage.jsx'
+import Page404 from './pages/404Page.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <StakeholderNewReq />
+      <Authentication />
     </BrowserRouter>
   </StrictMode>,
 )

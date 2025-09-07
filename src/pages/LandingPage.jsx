@@ -113,7 +113,9 @@ const LandingPage = () => {
 
         <div className="map-section-container">
           <div className="map-side-panel">
-            <h2>সরাসরি প্রকল্পের মানচিত্র</h2>
+            <div className="mt-20">
+              <h2>সরাসরি প্রকল্পের মানচিত্র</h2>
+            </div>
             <p>শহর জুড়ে বিভিন্ন সংস্থার চলমান এবং পরিকল্পিত কাজগুলি দেখুন।</p>
             <ul className="map-legend">
               <li><span className="color-dot wasa"></span>ওয়াসা</li>

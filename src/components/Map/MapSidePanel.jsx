@@ -4,7 +4,10 @@ import './MapSidePanel.css'; // This will use the updated CSS
 const MapSidePanel = () => {
   return (
     <div className="map-side-panel">
+      <div className="mt-20">
       <h2>সরাসরি প্রকল্পের মানচিত্র</h2>
+
+      </div>
       <p>শহর জুড়ে বিভিন্ন সংস্থার চলমান এবং পরিকল্পিত কাজগুলি দেখুন।</p>
       
       {/* FIX: Replaced company legend with the 3-status legend */}

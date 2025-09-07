@@ -8,31 +8,28 @@ import MapPage from './pages/MapPage';
 import { Routes, Route } from 'react-router-dom';
 import NoticePage from './pages/NoticePage/NoticePage';
 import Authentication from './pages/authentication';
-
-
+import StakeholderDashboard from './pages/stakeholderDashboard';
+import StakeholderNewReq from './pages/stakeholderNewReq';
+import StakeholderWorkReq from './pages/stakeholderWorkReq';
+import AuthorityDashboard from './pages/authorityDashboard';
+import AuthorityWorkRequests from './pages/authorityWorkRequests';
+import AuthorityWorkReqConflicted from './components/authorityWorkReqConflict';
+import AuthorityConflictChart from './pages/authorityConflictChart';
 const userLoggedIn = true;
 
 function App() {
   return (
     <div className="app-container">
-      <Navbar state="non_logged_in" />
+      
 
     
       <main className="content-wrapper">
         <Routes>
          
          
-          <Route path="/" element={<LandingPage />} />
-
-          <Route path="/authenticate" element={<Authentication/>}/>
-          
-         
-          <Route path="/authority" element={<MapPage />} />
-
-         <Route path="/noticeboard" element={<NoticePage />} />
-
-         
-          <Route
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/noticeboard" element={<NoticePage state="normal"/>} />
+        <Route
             path="/complaint/issueReporting"
             element={
               userLoggedIn ? (
@@ -44,9 +41,20 @@ function App() {
               )
             }
           />
+        
+        <Route path="/authenticate" element={<Authentication/>}/>
 
-          
 
+        <Route path="/stakeholder" element={<StakeholderDashboard /> } />
+        <Route path="/stakeholder/new-request" element={<StakeholderNewReq/>} />
+        <Route path="/stakeholder/pending-requests" element={<StakeholderWorkReq />} />
+        <Route path="/stakeholder/noticeboard" element={<NoticePage state="normal"/>} />
+         
+        <Route path="/authority" element={<AuthorityDashboard />} />
+        <Route path="/authority/work-requests" element={<AuthorityWorkRequests/>} />
+        <Route path="/authority/conflict-chart" element={<AuthorityConflictChart/>} />
+        <Route path="/authority/noticeboard" element={<NoticePage state="admin"/>} />
+         
         </Routes>
       </main>
 
