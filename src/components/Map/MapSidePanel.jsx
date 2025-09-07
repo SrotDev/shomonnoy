@@ -7,7 +7,7 @@ const MapSidePanel = () => {
       <h2>সরাসরি প্রকল্পের মানচিত্র</h2>
       <p>শহর জুড়ে বিভিন্ন সংস্থার চলমান এবং পরিকল্পিত কাজগুলি দেখুন।</p>
       
-      {/* FIX: Replaced company legend with the 3-status legend */}
+     
       <ul className="map-legend">
         <li><span className="color-dot planned"></span>পরিকল্পিত (Planned)</li>
         <li><span className="color-dot ongoing"></span>চলমান (Ongoing)</li>

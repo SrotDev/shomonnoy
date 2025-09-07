@@ -1,6 +1,6 @@
 .map-side-panel {
   flex: 0 0 350px;
-  background-color: #2d3748; /* Dark blue-gray background */
+  background-color: #2d3748; 
   color: #e2e8f0;
   padding: 40px;
   display: flex;
@@ -46,9 +46,9 @@
 }
 
 /* FIX: CSS classes now match the 3 statuses */
-.color-dot.planned { background-color: #f97316; }   /* Orange */
-.color-dot.ongoing { background-color: #ef4444; }   /* Red */
-.color-dot.completed { background-color: #22c55e; } /* Green */
+.color-dot.planned { background-color: #f97316; }  
+.color-dot.ongoing { background-color: #ef4444; }   
+.color-dot.completed { background-color: #22c55e; } 
 
 
 .map-panel-footer {
