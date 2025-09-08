@@ -1,5 +1,4 @@
-
-import React,  { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
 export default function WorkRequestForm({ geometry, onSubmit, onCancel }) {
@@ -7,6 +6,8 @@ export default function WorkRequestForm({ geometry, onSubmit, onCancel }) {
     startDate: '',
     endDate: '',
     reason: '',
+   
+    budget: '', 
     isEmergency: false,
   });
 
@@ -20,6 +21,7 @@ export default function WorkRequestForm({ geometry, onSubmit, onCancel }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     const finalRequestData = {
       ...formData,
       geometry,
@@ -52,6 +54,20 @@ export default function WorkRequestForm({ geometry, onSubmit, onCancel }) {
         <div className="form-group">
           <label htmlFor="reason">Reason for Work</label>
           <textarea id="reason" name="reason" value={formData.reason} onChange={handleChange} required placeholder="e.g., Main water pipeline repair..."></textarea>
+        </div>
+        
+  
+        <div className="form-group">
+          <label htmlFor="budget">Budget (in BDT)</label>
+          <input 
+            type="number" 
+            id="budget" 
+            name="budget" 
+            value={formData.budget} 
+            onChange={handleChange} 
+            required 
+            placeholder="e.g., 50000" 
+          />
         </div>
         
         <div className="checkbox-group">
