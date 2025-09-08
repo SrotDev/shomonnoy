@@ -13,6 +13,11 @@ import markerIcon2x from 'leaflet/dist/images/marker-icon-2x.png';
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
 import markerShadow from 'leaflet/dist/images/marker-shadow.png';
 
+import ClipLoader from "react-spinners/ClipLoader";
+
+
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: markerIcon2x,
@@ -21,50 +26,160 @@ L.Icon.Default.mergeOptions({
 });
 
 
-const mockRoadsData = [
-  {
-    "type": "Feature",
-    "properties": {
-      "name": "Mirpur Road Repair",
-      "company": "WASA",
-      "status": "Ongoing", 
-      "timeline": "1 Oct - 30 Oct",
-      "reason": "Main pipeline maintenance"
-    },
-    "geometry": { "type": "LineString", "coordinates": [[90.365, 23.775], [90.375, 23.785]] }
-  },
-  {
-    "type": "Feature",
-    "properties": {
-      "name": "Gulshan Avenue Paving",
-      "company": "RHD",
-      "status": "Planned", 
-      "timeline": "1 Nov - 15 Nov",
-      "reason": "Road resurfacing project"
-    },
-    "geometry": { "type": "LineString", "coordinates": [[90.41, 23.79], [90.42, 23.80]] }
-  },
-  {
-    "type": "Feature",
-    "properties": {
-      "name": "Dhanmondi Cable Work",
-      "company": "BTCL",
-      "status": "Completed", 
-      "timeline": "1 Sep - 25 Sep",
-      "reason": "Fiber optic cable installation"
-    },
-    "geometry": { "type": "LineString", "coordinates": [[90.37, 23.74], [90.38, 23.75]] }
-  }
-];
+// const mockRoadsData = [
+//   {
+//     "type": "Feature",
+//     "properties": {
+//       "name": "Mirpur Road Repair",
+//       "company": "WASA",
+//       "status": "Ongoing",
+//       "timeline": "1 Oct - 30 Oct",
+//       "reason": "Main pipeline maintenance"
+//     },
+//     "geometry": { "type": "LineString", "coordinates": [[90.365, 23.775], [90.375, 23.785]] }
+//   },
+//   {
+//     "type": "Feature",
+//     "properties": {
+//       "name": "Gulshan Avenue Paving",
+//       "company": "RHD",
+//       "status": "Planned",
+//       "timeline": "1 Nov - 15 Nov",
+//       "reason": "Road resurfacing project"
+//     },
+//     "geometry": { "type": "LineString", "coordinates": [[90.41, 23.79], [90.42, 23.80]] }
+//   },
+//   {
+//     "type": "Feature",
+//     "properties": {
+//       "name": "Dhanmondi Cable Work",
+//       "company": "BTCL",
+//       "status": "Completed",
+//       "timeline": "1 Sep - 25 Sep",
+//       "reason": "Fiber optic cable installation"
+//     },
+//     "geometry": { "type": "LineString", "coordinates": [[90.37, 23.74], [90.38, 23.75]] }
+//   }
+// ];
 
-const MapView = ({ requestData, isCompany = false, uuid=undefined }) => {
+
+
+
+const MapView = ({ requestData, isCompany = false }) => {
   const mapContainerRef = useRef(null);
   const mapInstanceRef = useRef(null);
   const highlightLayerRef = useRef(null);
   const [drawnGeometry, setDrawnGeometry] = useState(null);
   const [showRequestForm, setShowRequestForm] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [mockRoadsData, setMockRoadsData] = useState(undefined);
+
+  function wktToGeoJSONFeature(data) {
+    if (!data?.geom) return null;
+
+    const geom = data.geom;
+
+    // Match Point
+    if (geom.includes("POINT")) {
+      const match = geom.match(/POINT\s*\(([-0-9.]+)\s+([-0-9.]+)\)/);
+      if (!match) return null;
+
+      const lon = parseFloat(match[1]);
+      const lat = parseFloat(match[2]);
+
+      return {
+        type: requestData,
+        properties: {
+          name: data.city || "Unknown Location",
+          company: "N/A",
+          status: "Planned",
+          timeline: "N/A",
+          reason: "N/A"
+        },
+        geometry: {
+          type: "Point",
+          coordinates: [lon, lat]
+        }
+      };
+    }
+
+    // Match LineString
+    if (geom.includes("LINESTRING")) {
+      const match = geom.match(/LINESTRING\s*\((.+)\)/);
+      if (!match) return null;
+
+      // Split coordinates by comma
+      const coords = match[1].split(",").map(pair => {
+        const [lon, lat] = pair.trim().split(/\s+/).map(Number);
+        return [lon, lat];
+      });
+
+      return {
+        type: "Feature",
+        properties: {
+          name: data.city || "Unknown Location",
+          company: "N/A",
+          status: "Planned",
+          timeline: "N/A",
+          reason: "N/A"
+        },
+        geometry: {
+          type: "LineString",
+          coordinates: coords
+        }
+      };
+    }
+
+    return null; // unsupported type for now
+  }
+
+
+
+  async function getCoords() {
+    try {
+      const accessToken = localStorage.getItem("access_token");
+      const coordarray = await fetch(`${baseUrl}/locations/${requestData.location}/`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!coordarray.ok) {
+        console.log("failed");
+        return undefined;
+      }
+      const data = await coordarray.json();
+      const newData = wktToGeoJSONFeature(data)
+      console.log(newData);
+      return newData;
+    } catch (err) {
+      console.error("Error fetching coords:", err);
+      return undefined;
+    }
+  }
 
   useEffect(() => {
+    async function getRoadData() {
+      const dta = await getCoords();
+      if (dta) {
+        setMockRoadsData(dta);
+        setIsLoading(false);
+      }
+    }
+    getRoadData();
+  }, []);
+
+
+
+
+
+
+  useEffect(() => {
+
+
+
     if (!mapContainerRef.current || mapInstanceRef.current) return;
 
     const map = L.map(mapContainerRef.current, {
@@ -77,7 +192,7 @@ const MapView = ({ requestData, isCompany = false, uuid=undefined }) => {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
 
-   
+
     L.control.zoom({ position: 'bottomleft' }).addTo(map);
     L.control.attribution({ position: 'bottomright' }).addTo(map);
     const geocoder = L.Control.geocoder({ defaultMarkGeocode: true, position: 'bottomleft' }).addTo(map);
@@ -109,14 +224,16 @@ const MapView = ({ requestData, isCompany = false, uuid=undefined }) => {
       });
     };
 
-    
+
     mockRoadsData.forEach(drawRoad);
 
-    
+
+
+
     return () => { if (map) { map.remove(); mapInstanceRef.current = null; } };
   }, [isCompany]);
 
-  
+
   useEffect(() => {
     const map = mapInstanceRef.current;
     if (!map) return;
@@ -154,18 +271,30 @@ const MapView = ({ requestData, isCompany = false, uuid=undefined }) => {
           .setContent(popupContent)
           .openOn(map);
       });
-      
+
 
       highlightLayerRef.current = requestLayer;
       map.flyToBounds(requestLayer.getBounds(), { padding: [50, 50] });
     }
   }, [requestData]);
 
-  
+  if (isLoading) {
+
+    return (
+      <div
+        className=""
+        style={{ textAlign: "center", marginTop: "100px" }}
+      >
+        <ClipLoader color="#27d887" loading={true} size={50} />
+      </div>
+    );
+  }
+
+
   return (
     <>
       <div className="map-view-container" ref={mapContainerRef} />
-      
+
     </>
   );
 };

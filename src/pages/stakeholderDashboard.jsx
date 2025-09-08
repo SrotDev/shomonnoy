@@ -59,19 +59,23 @@ export default function StakeholderDashboard() {
                     });
 
                     const userData = await userInfo.json()
+                    console.log(userData)
+
                     if (!userInfo.ok) {
                         console.log("Here")
                         localStorage.removeItem("refresh_token");
                         localStorage.removeItem("access_token")
                         Navigate("/authenticate")
                     } else {
-                        if (userData.role === "citizen") {
-                            setNavState("user_logged_in");
-
-                        } else if (userData.role === "stakeholder") {
+                        localStorage.setItem('uuid', userData.uuid)
+                        console.log(localStorage.getItem('uuid'))
+                        if (userData.role === "stakeholder") {
                             setNavState("stakeholder_logged_in")
                         } else {
-                            setNavState("authority_logged_in")
+                            console.log("Here")
+                            localStorage.removeItem("refresh_token");
+                            localStorage.removeItem("access_token")
+                            Navigate("/authenticate")
                         }
 
                         setNavName(userData.name)

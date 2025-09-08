@@ -45,10 +45,11 @@ const authority_LoginItems = [
 
 
 function logOut() {
-    
+
     // 1. Remove token/session
     localStorage.removeItem("refresh_token");
-    localStorage.removeItem("access_token")
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("uuid");
 
 }
 
@@ -151,14 +152,37 @@ export default function Navbar({ state, name }) {
                         }
                     })}
 
-                    {state === "stakeholder_logged_in" && stakeHolder_LoginItems.map(item => (
-                        <motion.div key={item.id} className=""
-                            whileHover={{ scale: 1.1 }}
-                        >
-                            <Link className="navbar-link" to={item.path}>{item.title}</Link>
+                    {state === "stakeholder_logged_in" && stakeHolder_LoginItems.map((item) => {
+                        if (item.path === "/stakeholder/logout") {
+                            return (
+                                // <li key={item.id} onClick={logout}>
+                                //     {item.title}
+                                // </li>
+                                <motion.div key={item.id} className="cursor-pointer font-bold"
+                                    whileHover={{ scale: 1.1 }}
+                                    onClick={
+                                        () => {
+                                            logOut()
+                                            console.log("logged out")
+                                            navigate("/authenticate")
+                                        }
+                                    }
+                                >
+                                    {item.title}
 
-                        </motion.div>
-                    ))}
+                                </motion.div>
+                            );
+                        } else {
+                            return (
+                                <motion.div key={item.id} className=""
+                                    whileHover={{ scale: 1.1 }}
+                                >
+                                    <Link className="navbar-link" to={item.path}>{item.title}</Link>
+
+                                </motion.div>
+                            )
+                        }
+                    })}
 
                     {state === "authority_logged_in" && authority_LoginItems.map(item => (
                         <motion.div key={item.id} className=""

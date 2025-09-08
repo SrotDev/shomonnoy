@@ -4,6 +4,7 @@ import MapView from './Map/map.jsx';
 import crossLogo from '../assets/maki_cross.png';
 import './Map/map.css';
 
+
 const modalVariants = {
     hidden: { scale: 0.9, opacity: 0 },
     visible: { scale: 1, opacity: 1, transition: { duration: 0.3, ease: "easeOut" } },
@@ -11,6 +12,7 @@ const modalVariants = {
 };
 
 export default function MapModal({ isOpen, onClose, taskData }) {
+
     return (
         <AnimatePresence>
             {isOpen && (
