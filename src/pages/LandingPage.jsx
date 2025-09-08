@@ -65,8 +65,10 @@ const LandingPage = () => {
             console.log("Here")
             localStorage.removeItem("refresh_token");
             localStorage.removeItem("access_token")
+            localStorage.removeItem("uuid")
             Navigate("/authenticate")
           }else{
+            localStorage.setItem('uuid', userData.uuid)
             if(userData.role === "citizen"){
               setNavState("user_logged_in");
               

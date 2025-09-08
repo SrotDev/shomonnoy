@@ -16,39 +16,26 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 export default function StakeholderPlannedTask() {
     const [isMapModalOpen, setMapModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
-    const handleOpenMap = (task) => { setSelectedTask(task); setMapModalOpen(true); };
+    const [coords, setCoords] = useState(null);
+
+    const handleOpenMap = async (task) => {
+        // const location_uuid = task.location;
+        // console.log(location_uuid)
+
+        // const data = await getCoords(location_uuid);
+        // setCoords(data);
+        setSelectedTask(task);
+        setMapModalOpen(true);
+    };
+
     const handleCloseMap = () => { setMapModalOpen(false); };
     const [loading, setLoading] = useState(true)
     const [tasks, setTasks] = useState(undefined)
 
     const navigate = useNavigate()
 
-    async function getCoords({ uuid }) {
-        try {
-            const coordarray = await fetch((`${baseUrl}/locations/${uuid}`), {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${accessToken}`,
-                },
-            })
-            if (!coordarray.ok) {
-                console.log("failed")
-                return undefined
-            }
-            const data = await coordarray.json()
-            return data;
-        } catch (err) {
-            console.error("Error checking availability:", err);
-            return undefined;
-        }
-    }
+    
 
-    if (isLoading) {
-        return (
-            <PreLoader2 />
-        )
-    }
 
 
 
@@ -73,6 +60,7 @@ export default function StakeholderPlannedTask() {
             return null;
         } else {
             const task = await response.json();
+
             return task;
         }
     }
