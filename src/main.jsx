@@ -16,14 +16,14 @@ import StakeholderProposedTask from './components/stakeholderProposedTask.jsx'
 import StakeholderWaitingTask from './components/stakeholderWaitingTask.jsx'
 import RequestWorkPage from './pages/RequestWorkPage.jsx'
 import LandingPage from './pages/LandingPage.jsx'
-//import StakeholderNewReq from './pages/stakeholderNewReq.jsx'
+import StakeholderNewReq from './pages/stakeholderNewReq.jsx'
 import PreLoader2 from './pages/LoadingPage.jsx'
 import Page404 from './pages/404Page.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
-      <RequestWorkPage/>
+      <App/>
     </BrowserRouter>
   </StrictMode>,
 )

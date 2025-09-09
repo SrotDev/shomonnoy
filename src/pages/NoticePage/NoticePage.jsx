@@ -3,7 +3,8 @@ import './NoticePage.css';
 import Navbar from '../../components/Navbar';
 import { Link, useNavigate } from "react-router-dom"
 import { easeInOut, motion, rgba } from "framer-motion"
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import PreLoader2 from '../LoadingPage';
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const noticeData = [
@@ -90,10 +91,117 @@ const noticeData = [
 
 function NoticePage ({state}) {
   const [isLoading, setIsLoading] = useState(true)
+  const [navState, setNavState] = useState("non_logged_in");
+  const [navName , setNavName] = useState("");
+    
+  
+    const Navigate = useNavigate()
+  
+    async function checkAvailablility() {
+      try {
+        console.log("request sent");
+        const response = await fetch(`${baseUrl}/`, { method: "GET" });
+  
+        if (!response.ok) {
+          console.log("Backend not ready, status:", response.status);
+          return false;
+        }
+  
+        // Only parse if response is ok
+        const data = await response.json();
+        console.log("Backend response:", data);
+        return true;
+      } catch (err) {
+        console.error("Error checking availability:", err);
+        return false;
+      }
+    }
+  
+  
+  
+  
+    useEffect(() => {
+      let intervalId;
+  
+      async function pollAvailability() {
+        const available = await checkAvailablility();
+        if (available) {
+          var accessToken = localStorage.getItem('access_token');
+          if (accessToken) {
+  
+            const userInfo = await fetch(`${baseUrl}/profile/`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+              },
+  
+            });
+  
+            const userData = await userInfo.json()
+            if (!userInfo.ok) {
+              console.log("Here")
+              localStorage.removeItem("refresh_token");
+              localStorage.removeItem("access_token")
+              localStorage.removeItem("uuid")
+              Navigate("/authenticate")
+            }else{
+              localStorage.setItem('uuid', userData.uuid)
+              if(userData.role === "citizen"){
+                setNavState("user_logged_in");
+                
+              }else if (userData.role === "stakeholder"){
+                setNavState("stakeholder_logged_in")
+              }else {
+                setNavState("authority_logged_in")
+              }
+  
+              setNavName(userData.name)
+            }
+  
+            
+  
+            
+  
+  
+          } else {
+            setNavState("non_logged_in");
+            setNavName("Login")
+          }
+  
+          setIsLoading(false)
+          if (intervalId) {
+            clearInterval(intervalId);
+          }
+        }
+      }
+  
+      async function getUserRole(accessToken) {
+  
+      }
+  
+  
+  
+      pollAvailability();
+      intervalId = setInterval(pollAvailability, 5000);
+  
+  
+  
+      return () => {
+        if (intervalId) clearInterval(intervalId);
+      };
+    }, []);
+
+
+  if(isLoading){
+    return(
+      <PreLoader2 />
+    )
+  }
 
   return (
     <div className="notice-page-wrapper">
-      <Navbar state="user_logged_in" />
+      <Navbar state={navState} name={navName} />
       <div className="blob blob-1"></div>
       <div className="blob blob-2"></div>
       <div className="blob blob-3"></div>

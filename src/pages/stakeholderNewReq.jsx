@@ -4,23 +4,7 @@ import { Calendar, MapPin, X, Send } from "lucide-react";
 import Navbar from "../components/Navbar";
 
 
-var tasks = [{
-        id: "WASA#20102",
-        from: "1 Sep",
-        to: "19 Sep",
-        isEmergency: false,
 
-    },
-
-    {
-        id: "WASA#20102",
-        from: "1 Sep",
-        to: "19 Sep",
-        isEmergency: true,
-
-    },
-    
-]
 
 function EditableTaskCard({task}) {
     const [title, setTitle] = useState(task.id);

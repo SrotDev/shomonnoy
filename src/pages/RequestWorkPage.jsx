@@ -63,7 +63,6 @@ export default function RequestWorkPage() {
   }, []);
 
   async function handleFinalSubmit(requestData) {
-    console.log("--- FINAL DATA TO BE SENT TO BACKEND ---");
     var accessToken = localStorage.getItem('access_token');
     const newgeom = geojsonToWkt(drawnGeometry)
     const data = {
@@ -71,7 +70,7 @@ export default function RequestWorkPage() {
       geom: newgeom
     }
 
-    console.log(JSON.stringify(data, null, 2));
+    //console.log(JSON.stringify(data, null, 2));
     try {
       const response = await fetch(`${baseUrl}/locations/`, {
         method: 'POST',
@@ -90,7 +89,7 @@ export default function RequestWorkPage() {
       }
 
       const result = await response.json();
-      console.log('Successfully got uuid:', result.uuid);
+      //console.log('Successfully got uuid:', result.uuid);
 
       const finalData = {
         stakeholder: localStorage.getItem("uuid"),
@@ -104,12 +103,12 @@ export default function RequestWorkPage() {
         proposed_end_date: requestData.endDate,
         start_date: null,
         end_date: null,
-        budget: 1250000.50   // TODO
+        budget: requestData.budget  // TODO
 
       }
 
-      console.log("final")
-      console.log(finalData)
+      //console.log("final")
+      //console.log(finalData)
       const resp = await fetch(`${baseUrl}/works/`,{
         method: 'POST',
         headers: {
@@ -121,10 +120,11 @@ export default function RequestWorkPage() {
 
       const res = await resp.json()
 
-      console.log(res)
+      //console.log(res)
 
       alert("Work request has been successfully submitted!");
       setDrawnGeometry(null);
+      Navigate("/stakeholder/pending-requests")
 
     } catch (error) {
       console.error('Failed to submit work request:', error);

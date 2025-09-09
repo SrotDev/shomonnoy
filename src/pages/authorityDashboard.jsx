@@ -1,54 +1,162 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { AnimatePresence, easeInOut, motion } from "framer-motion"
 import { useState, useEffect } from "react";
 import '../css/authentication.css'
 import Navbar from "../components/Navbar";
 import './LandingPage.css';
 import '../css/authorityDashboard.css'
+import PreLoader2 from "./LoadingPage";
+
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 export default function AuthorityDashboard() {
     const [carPosition, setCarPosition] = useState(12);
-    
-      useEffect(() => {
+    const [navState, setNavState] = useState("non_logged_in");
+    const [navName, setNavName] = useState("");
+    const [isLoading, setIsLoading] = useState(true)
+
+    const Navigate = useNavigate()
+
+    async function checkAvailablility() {
+        try {
+            console.log("request sent");
+            const response = await fetch(`${baseUrl}/`, { method: "GET" });
+
+            if (!response.ok) {
+                console.log("Backend not ready, status:", response.status);
+                return false;
+            }
+
+            // Only parse if response is ok
+            const data = await response.json();
+            console.log("Backend response:", data);
+            return true;
+        } catch (err) {
+            console.error("Error checking availability:", err);
+            return false;
+        }
+    }
+
+
+
+
+    useEffect(() => {
+        let intervalId;
+
+        async function pollAvailability() {
+            const available = await checkAvailablility();
+            if (available) {
+                var accessToken = localStorage.getItem('access_token');
+                if (accessToken) {
+
+                    const userInfo = await fetch(`${baseUrl}/profile/`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${accessToken}`,
+                        },
+
+                    });
+
+                    const userData = await userInfo.json()
+                    if (!userInfo.ok) {
+                        console.log("Here")
+                        localStorage.removeItem("refresh_token");
+                        localStorage.removeItem("access_token")
+                        localStorage.removeItem("uuid")
+                        Navigate("/authenticate")
+                    } else {
+                        localStorage.setItem('uuid', userData.uuid)
+                        if (userData.role === "authority") {
+                            setNavState("authority_logged_in")
+                        } else {
+                            console.log("Here")
+                            localStorage.removeItem("refresh_token");
+                            localStorage.removeItem("access_token")
+                            localStorage.removeItem("uuid")
+                            Navigate("/authenticate")
+                        }
+
+                        setNavName(userData.name)
+                    }
+
+
+
+
+
+
+                } else {
+                    setNavState("non_logged_in");
+                    setNavName("Login")
+                }
+
+                setIsLoading(false)
+                if (intervalId) {
+                    clearInterval(intervalId);
+                }
+            }
+        }
+
+        async function getUserRole(accessToken) {
+
+        }
+
+
+
+        pollAvailability();
+        intervalId = setInterval(pollAvailability, 5000);
+
+
+
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
+    }, []);
+
+    useEffect(() => {
         const handleScroll = () => {
-          const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
-          if (scrollableHeight === 0) return;
-          const scrollTop = window.scrollY;
-          const scrollProgress = scrollTop / scrollableHeight;
-          const startPosition = 12; const endPosition = 75;
-          const animationProgress = Math.min(scrollProgress * 2.5, 1);
-          const newPosition = startPosition + (endPosition - startPosition) * animationProgress;
-          setCarPosition(newPosition);
+            const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight;
+            if (scrollableHeight === 0) return;
+            const scrollTop = window.scrollY;
+            const scrollProgress = scrollTop / scrollableHeight;
+            const startPosition = 12; const endPosition = 75;
+            const animationProgress = Math.min(scrollProgress * 2.5, 1);
+            const newPosition = startPosition + (endPosition - startPosition) * animationProgress;
+            setCarPosition(newPosition);
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
-      }, []);
+    }, []);
+
+    if (isLoading) {
+        return <PreLoader2 />
+    }
 
     return (
         <>
-            <Navbar state="authority_logged_in"></Navbar>
+            <Navbar state={navState} name={navName}></Navbar>
             <div className="landing-hero-section">
                 <div className="flex flex-col items-center justify-center">
                     <h1 className="landing-title">সমন্বয়</h1>
                     <div className="flex flex-row gap-40 home-buttons">
                         <motion.div className="bg-[rgb(114,198,158)]  rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
                             whileHover={{
-                                scale : 1.1
+                                scale: 1.1
                             }}
                         ><p>সচল রিপোর্টসমূহ</p></motion.div>
                         <motion.div className=" bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
                             whileHover={{
-                                scale : 1.1,
+                                scale: 1.1,
                             }}
                         ><p>কনফ্লিক্ট চার্ট</p></motion.div>
                         <motion.div className="bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
                             whileHover={{
-                                scale : 1.1
+                                scale: 1.1
                             }}
-                        ><p>মানচিত্র দেখুন</p></motion.div> 
+                        ><p>মানচিত্র দেখুন</p></motion.div>
                     </div>
                 </div>
-                
+
                 <div className="scene-container">
 
 

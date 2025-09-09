@@ -72,43 +72,43 @@ const MapView = ({ requestData, isCompany = false }) => {
   const [drawnGeometry, setDrawnGeometry] = useState(null);
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [mockRoadsData, setMockRoadsData] = useState(undefined);
+  const [mockRoadsData, setMockRoadsData] = useState([]);
 
   function wktToGeoJSONFeature(data) {
     if (!data?.geom) return null;
 
     const geom = data.geom;
 
-    // Match Point
-    if (geom.includes("POINT")) {
-      const match = geom.match(/POINT\s*\(([-0-9.]+)\s+([-0-9.]+)\)/);
-      if (!match) return null;
+    // // Match Point
+    // if (geom.includes("POINT")) {
+    //   const match = geom.match(/POINT\s*\(([-0-9.]+)\s+([-0-9.]+)\)/);
+    //   if (!match) return null;
 
-      const lon = parseFloat(match[1]);
-      const lat = parseFloat(match[2]);
+    //   const lon = parseFloat(match[1]);
+    //   const lat = parseFloat(match[2]);
 
-      return {
-        type: requestData,
-        properties: {
-          name: data.city || "Unknown Location",
-          company: "N/A",
-          status: "Planned",
-          timeline: "N/A",
-          reason: "N/A"
-        },
-        geometry: {
-          type: "Point",
-          coordinates: [lon, lat]
-        }
-      };
-    }
+    //   return {
+    //     type: requestData,
+    //     properties: {
+    //       name: requestData.city || "Unknown Location",
+    //       company: "N/A",
+    //       status: requestData.status,
+    //       timeline: "N/A",
+    //       reason: "N/A"
+    //     },
+    //     geometry: {
+    //       type: "Point",
+    //       coordinates: [lon, lat]
+    //     }
+    //   };
+    // }
 
-    // Match LineString
+
     if (geom.includes("LINESTRING")) {
       const match = geom.match(/LINESTRING\s*\((.+)\)/);
       if (!match) return null;
 
-      // Split coordinates by comma
+
       const coords = match[1].split(",").map(pair => {
         const [lon, lat] = pair.trim().split(/\s+/).map(Number);
         return [lon, lat];
@@ -130,7 +130,7 @@ const MapView = ({ requestData, isCompany = false }) => {
       };
     }
 
-    return null; // unsupported type for now
+    return null;
   }
 
 
@@ -164,7 +164,7 @@ const MapView = ({ requestData, isCompany = false }) => {
     async function getRoadData() {
       const dta = await getCoords();
       if (dta) {
-        setMockRoadsData(dta);
+        setMockRoadsData([dta]);
         setIsLoading(false);
       }
     }
@@ -173,110 +173,77 @@ const MapView = ({ requestData, isCompany = false }) => {
 
 
 
-
+  useEffect(() => {
+    if (mapInstanceRef.current) {
+      setTimeout(() => {
+        mapInstanceRef.current.invalidateSize();
+      }, 300);
+    }
+  }, [isLoading]);
 
 
   useEffect(() => {
-
-
-
     if (!mapContainerRef.current || mapInstanceRef.current) return;
 
-    const map = L.map(mapContainerRef.current, {
-      zoomControl: false,
-      attributionControl: false,
-    }).setView([23.75, 90.39], 13);
+    const { clientWidth, clientHeight } = mapContainerRef.current;
+    if (clientWidth === 0 || clientHeight === 0) {
+      const timeout = setTimeout(() => {
+        if (!mapInstanceRef.current) {
+          const map = L.map(mapContainerRef.current).setView([23.75, 90.39], 13);
+          mapInstanceRef.current = map;
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+        }
+      }, 1000); // wait a tick for layout
+      return () => clearTimeout(timeout);
+    }
+
+    const map = L.map(mapContainerRef.current).setView([23.75, 90.39], 13);
     mapInstanceRef.current = map;
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(map);
+    setTimeout(() => {
+      map.invalidateSize();
+    }, 200);
 
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+  }, [isLoading]);
 
-    L.control.zoom({ position: 'bottomleft' }).addTo(map);
-    L.control.attribution({ position: 'bottomright' }).addTo(map);
-    const geocoder = L.Control.geocoder({ defaultMarkGeocode: true, position: 'bottomleft' }).addTo(map);
-    geocoder.on('markgeocode', (e) => map.panTo(e.geocode.center));
-
-    const drawRoad = (feature) => {
-      const props = feature.properties;
-      const color =
-        props.status === 'Ongoing' ? '#ef4444' :
-          props.status === 'Completed' ? '#22c55e' :
-            props.status === 'Planned' ? '#f97316' :
-              '#888888';
-
-      const lineLayer = L.geoJSON(feature, {
-        style: { color, weight: 8, opacity: 0.85, lineCap: 'round', lineJoin: 'round' }
-      }).addTo(map);
-
-      lineLayer.on('click', () => {
-        const popupContent = `
-          <div class="map-popup">
-            <h3>${props.name || 'Unnamed Project'}</h3>
-            <p><strong>Company:</strong> ${props.company || 'N/A'}</p>
-            <p><strong>Status:</strong> <span class="status-${props.status?.toLowerCase()}">${props.status || 'N/A'}</span></p>
-            <p><strong>Timeline:</strong> ${props.timeline || 'N/A'}</p>
-            <p><strong>Reason:</strong> ${props.reason || 'N/A'}</p>
-          </div>
-        `;
-        L.popup().setLatLng(lineLayer.getBounds().getCenter()).setContent(popupContent).openOn(map);
-      });
-    };
-
-
-    mockRoadsData.forEach(drawRoad);
-
-
-
-
-    return () => { if (map) { map.remove(); mapInstanceRef.current = null; } };
-  }, [isCompany]);
 
 
   useEffect(() => {
     const map = mapInstanceRef.current;
-    if (!map) return;
+    if (!map || !mockRoadsData.length) return;
 
-    if (highlightLayerRef.current) {
-      map.removeLayer(highlightLayerRef.current);
-    }
+    const drawRoad = (feature) => {
+      const props = feature.properties;
+      const color =
+        props.status === "Ongoing" ? "#ef4444" :
+          props.status === "Completed" ? "#22c55e" :
+            props.status === "Planned" ? "#f97316" :
+              "#888888";
 
-    if (requestData && requestData.geometry) {
-      const geoJsonFeature = {
-        "type": "Feature",
-        "properties": { ...requestData },
-        "geometry": requestData.geometry
-      };
-
-      const requestLayer = L.geoJSON(geoJsonFeature, {
-        style: {
-          color: '#3b82f6',
-          weight: 10,
-          opacity: 0.9,
-        }
+      const lineLayer = L.geoJSON(feature, {
+        style: { color, weight: 8, opacity: 0.85, lineCap: "round", lineJoin: "round" },
       }).addTo(map);
 
-      requestLayer.on('click', () => {
-        const props = geoJsonFeature.properties;
+      lineLayer.on("click", () => {
         const popupContent = `
-          <div class="map-popup selected-popup">
-            <h3>Selected: ${props.id || 'N/A'}</h3>
-            <p><strong>Timeline:</strong> ${props.from || ''} - ${props.to || ''}</p>
-            ${props.isEmergency ? '<p><strong class="emergency">This is an emergency request.</strong></p>' : ''}
-          </div>
-        `;
+        <div class="map-popup">
+          <h3>${props.name || "Unnamed Project"}</h3>
+          <p><strong>Company:</strong> ${props.company || "N/A"}</p>
+          <p><strong>Status:</strong> <span class="status-${props.status?.toLowerCase()}">${props.status || "N/A"}</span></p>
+          <p><strong>Timeline:</strong> ${props.timeline || "N/A"}</p>
+          <p><strong>Reason:</strong> ${props.reason || "N/A"}</p>
+        </div>
+      `;
         L.popup()
-          .setLatLng(requestLayer.getBounds().getCenter())
+          .setLatLng(lineLayer.getBounds().getCenter())
           .setContent(popupContent)
           .openOn(map);
       });
+    };
 
-
-      highlightLayerRef.current = requestLayer;
-      map.flyToBounds(requestLayer.getBounds(), { padding: [50, 50] });
-    }
-  }, [requestData]);
+    mockRoadsData.forEach(drawRoad);
+  }, [mockRoadsData]);
 
   if (isLoading) {
 
