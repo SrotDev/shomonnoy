@@ -73,6 +73,8 @@ const MapView = ({ requestData, isCompany = false }) => {
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [mockRoadsData, setMockRoadsData] = useState([]);
+  const [avgX , setAvgX ] = useState(23.75)
+  const [avgY, setAvgY ] = useState(90.39)
 
   function wktToGeoJSONFeature(data) {
     if (!data?.geom) return null;
@@ -113,15 +115,21 @@ const MapView = ({ requestData, isCompany = false }) => {
         const [lon, lat] = pair.trim().split(/\s+/).map(Number);
         return [lon, lat];
       });
+      
+      const X = coords.reduce((sum, pair) => sum + pair[0], 0) / coords.length;
+      const Y = coords.reduce((sum, pair) => sum + pair[1], 0) / coords.length;
+
+      setAvgX(X)
+      setAvgY(Y)
 
       return {
         type: "Feature",
         properties: {
-          name: data.city || "Unknown Location",
+          name: requestData.city || "Unknown Location",
           company: "N/A",
           status: "Planned",
-          timeline: "N/A",
-          reason: "N/A"
+          timeline: requestData.proposed_start_date + "-" + requestData.proposed_end_date,
+          reason: requestData.details 
         },
         geometry: {
           type: "LineString",
@@ -189,15 +197,17 @@ const MapView = ({ requestData, isCompany = false }) => {
     if (clientWidth === 0 || clientHeight === 0) {
       const timeout = setTimeout(() => {
         if (!mapInstanceRef.current) {
-          const map = L.map(mapContainerRef.current).setView([23.75, 90.39], 13);
+          const map = L.map(mapContainerRef.current).setView([avgY, avgX], 15);
+          console.log(avgX)
+          console.log(avgY)
           mapInstanceRef.current = map;
           L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
         }
-      }, 1000); // wait a tick for layout
+      }, 1000); 
       return () => clearTimeout(timeout);
     }
 
-    const map = L.map(mapContainerRef.current).setView([23.75, 90.39], 13);
+    const map = L.map(mapContainerRef.current).setView([avgY, avgX], 15);
     mapInstanceRef.current = map;
 
     setTimeout(() => {

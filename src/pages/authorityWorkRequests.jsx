@@ -91,11 +91,6 @@ export default function AuthorityWorkRequests() {
                         setNavName(userData.name)
                     }
 
-
-
-
-
-
                 } else {
                     setNavState("non_logged_in");
                     setNavName("Login")
@@ -107,12 +102,6 @@ export default function AuthorityWorkRequests() {
                 }
             }
         }
-
-        async function getUserRole(accessToken) {
-
-        }
-
-
 
         pollAvailability();
         intervalId = setInterval(pollAvailability, 5000);
@@ -164,13 +153,13 @@ export default function AuthorityWorkRequests() {
                     >
                         <p>সাংঘর্ষিক</p>
                     </motion.div>
-                    <motion.div className="bg-white rounded-full px-5 py-2 text-center shadow-md font-bold cursor-pointer"
+                    {/* <motion.div className="bg-white rounded-full px-5 py-2 text-center shadow-md font-bold cursor-pointer"
                         whileHover={{ scale: 1.05 }}
                         animate={{ backgroundColor: optState === 2 ? '#72C69E' : '#FFFFFF', color: optState === 2 ? '#FFFFFF' : '#333333' }}
                         onClick={() => setOptState(2)}
                     >
                         <p>পুনঃনিরীক্ষণ আবেদনসমূহ</p>
-                    </motion.div>
+                    </motion.div> */}
                 </div>
 
 
@@ -178,12 +167,12 @@ export default function AuthorityWorkRequests() {
 
                     {optState === 0 && <AuthorityWorkReqNormal onShowMap={handleShowMap} />}
                     {optState === 1 && <AuthorityWorkReqConflicted onShowMap={handleShowMap} />}
-                    {optState === 2 && <AuthorityWorkReqPending onShowMap={handleShowMap} />}
+                    {/* {optState === 2 && <AuthorityWorkReqPending onShowMap={handleShowMap} />} */}
                 </div>
             </div>
 
 
-           // In AuthorityWorkRequests.js
+           
 
             <AnimatePresence>
                 {isMapVisible && (

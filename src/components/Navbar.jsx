@@ -15,6 +15,7 @@ const non_LoginItems = [
 const user_LoginItems = [
     { id: 1, title: "হোম", path: "/" },
     //{ id: 2, title: "নোটিশ বোর্ড", path: "/noticeboard" },
+    { id: 3, title: "নোটিফিকেশন প্যানেল", path: "/notifications" },
     { id: 3, title: "অভিযোগ", path: "/complaint/issueReporting" },
     { id: 4, title: "ফিডব্যাক", path: "/feedback" },
     { id: 5, title: "নোটিশ বোর্ড", path: "/noticeboard" },
@@ -24,6 +25,7 @@ const user_LoginItems = [
 const stakeHolder_LoginItems = [
     { id: 1, title: "হোম", path: "/stakeholder" },
     { id: 2, title: "নোটিশ বোর্ড", path: "/noticeboard" },
+    { id: 3, title: "নোটিফিকেশন প্যানেল", path: "/stakeholder/notifications" },
     { id: 3, title: "সচল রিপোর্টসমূহ", path: "/stakeholder/pending-requests" },
     { id: 4, title: "নতুন রিপোর্ট তৈরী", path: "/stakeholder/requestWork" },
     { id: 5, title: "ফিডব্যাক", path: "/stakeholder/feedback" },
@@ -184,14 +186,35 @@ export default function Navbar({ state, name }) {
                         }
                     })}
 
-                    {state === "authority_logged_in" && authority_LoginItems.map(item => (
-                        <motion.div key={item.id} className=""
-                            whileHover={{ scale: 1.1 }}
-                        >
-                            <Link className="navbar-link" to={item.path}>{item.title}</Link>
+                    {state === "authority_logged_in" && authority_LoginItems.map((item) => {
+                        if (item.path === "/authority/logout") {
+                            return (
+                               
+                                <motion.div key={item.id} className="cursor-pointer font-bold"
+                                    whileHover={{ scale: 1.1 }}
+                                    onClick={
+                                        () => {
+                                            logOut()
+                                            console.log("logged out")
+                                            navigate("/authenticate")
+                                        }
+                                    }
+                                >
+                                    {item.title}
 
-                        </motion.div>
-                    ))}
+                                </motion.div>
+                            );
+                        } else {
+                            return (
+                                <motion.div key={item.id} className=""
+                                    whileHover={{ scale: 1.1 }}
+                                >
+                                    <Link className="navbar-link" to={item.path}>{item.title}</Link>
+
+                                </motion.div>
+                            )
+                        }
+                    })}
                 </div>
 
             </div>

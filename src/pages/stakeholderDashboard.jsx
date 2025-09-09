@@ -138,20 +138,32 @@ export default function StakeholderDashboard() {
                 <div className="flex flex-col items-center justify-center">
                     <h1 className="landing-title">সমন্বয়</h1>
                     <div className="flex flex-row gap-40 home-buttons">
-                        <motion.div className="bg-[rgb(114,198,158)]  rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
-                            whileHover={{
-                                scale: 1.1
-                            }}
-                        ><p>সচল রিপোর্টসমূহ</p></motion.div>
-                        <motion.div className=" bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
+                        <motion.div className="bg-[rgb(114,198,158)]  rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold cursor-pointer"
                             whileHover={{
                                 scale: 1.1,
                             }}
-                        ><p>নতুন রিপোর্ট তৈরি </p></motion.div>
-                        <motion.div className="bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold"
-                            whileHover={{
-                                scale: 1.1
+                            onClick={() => {
+                                Navigate('/stakeholder/pending-requests')
                             }}
+                            // onTap={{
+                            //     scale : 0.9,
+                            // }}
+                        ><p>সচল রিপোর্টসমূহ</p></motion.div>
+                        <motion.div className=" bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold cursor-pointer"
+                            whileHover={{
+                                scale: 1.1,
+                            }}
+                            // onTap={{
+                            //     scale : 0.9,
+                            // }}
+                        ><p>নতুন রিপোর্ট তৈরি </p></motion.div>
+                        <motion.div className="bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold cursor-pointer"
+                            whileHover={{
+                                scale: 1.1,
+                            }}
+                            // onTap={{
+                            //     scale : 0.9,
+                            // }}
                         ><p>ফিডব্যাক</p></motion.div>
                     </div>
                 </div>
