@@ -52,6 +52,33 @@ export default function AuthorityWorkReqConflicted({ onShowMap }) {
 
     const navigate = useNavigate()
 
+    async function decline(item) {
+        console.log(item)
+        const accessToken = localStorage.getItem("access_token");
+        const response = await fetch(`${baseUrl}/works/${item.uuid}/`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                status: "Declined"
+            }),
+        })
+
+
+
+        const resp = await response.json()
+
+        if (!response.ok) {
+            console.log("error")
+        } else {
+            alert("Work request has been successfully accepted!");
+            window.location.reload();
+        }
+
+    }
+
     async function getTasks() {
         const accessToken = localStorage.getItem("access_token");
         if (!accessToken) return null;
@@ -178,13 +205,16 @@ export default function AuthorityWorkReqConflicted({ onShowMap }) {
                                                 <MapPinIcon />
                                             </motion.button>
 
-                                            {/* <motion.button
+                                            <motion.button
                                                 className="p-3 bg-green-600 rounded-lg shadow-sm hover:bg-green-700 transition-all"
                                                 title="Reject"
                                                 whileHover={{ scale: 1.15 }} whileTap={{ scale: 0.9 }}
+                                                onClick={() => {
+                                                    decline(item)
+                                                }}
                                             >
                                                 <XIcon />
-                                            </motion.button> */}
+                                            </motion.button>
                                         </div>
                                     </div>
                                 ))}
