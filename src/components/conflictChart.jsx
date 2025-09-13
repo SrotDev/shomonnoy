@@ -4,6 +4,7 @@ import { Gantt, ViewMode } from "gantt-task-react";
 import { Link, useNavigate } from "react-router-dom"
 import "gantt-task-react/dist/index.css";
 import ClipLoader from "react-spinners/ClipLoader";
+import { details } from "framer-motion/client";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 
 const MyTaskListHeader = () => (
@@ -92,24 +93,26 @@ export default function ConflictChartWithButtons({ onMapClick }) {
         for (const group of conflictGroups) {
             const transformedGroup = [];
             for (const task of group) {
-                if(
+                if (
                     task.status == "Declined"
-                ){
+                ) {
                     continue;
                 }
 
                 transformedGroup.push({
                     // Gantt-required fields
                     id: task.uuid,
-                    name: task.name+ (task.status === "Planned" ? " (Authorized)": ""), // or stakeholder/org if you prefer
+                    name: task.name + (task.status === "Planned" ? " (Authorized)" : ""),
                     start: parseDate(task.proposed_start_date),
                     end: parseDate(task.proposed_end_date),
-                    description: task.details ,
-                    progress: (task.status === "Planned" ? 100: 0),
-                    isDisabled: (task.status === "Planned" ? true: false),
-                    
-                    
+                    description: task.details,
+                    progress: (task.status === "Planned" ? 100 : 0),
+                    isDisabled: (task.status === "Planned" ? true : false),
+                    hasChanged: false,
+
+
                     // Preserve extra info so nothing is lost
+                    uuid: task.uuid,
                     budget: task.budget,
                     conflicts: task.conflicts,
                     created_at: task.created_at,
@@ -128,6 +131,11 @@ export default function ConflictChartWithButtons({ onMapClick }) {
         console.log(rawTasks)
         return rawTasks;
     }
+
+
+
+
+
 
 
 
@@ -202,6 +210,107 @@ export default function ConflictChartWithButtons({ onMapClick }) {
 
 
 function ConflictGroup({ tasks, idx, onMapClick }) {
+
+    async function accept(item) {
+        console.log(item)
+        const accessToken = localStorage.getItem("access_token");
+        const response = await fetch(`${baseUrl}/works/${item.uuid}/`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                status: "Planned"
+            }),
+        })
+
+
+
+        const resp = await response.json()
+
+        if (!response.ok) {
+            console.log("error")
+        } else {
+
+
+        }
+
+    }
+
+    async function decline(item) {
+        console.log(item)
+        const accessToken = localStorage.getItem("access_token");
+        const response = await fetch(`${baseUrl}/works/${item.uuid}/`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                status: "Declined"
+            }),
+        })
+
+
+
+        const resp = await response.json()
+
+        if (!response.ok) {
+            console.log("error")
+        } else {
+
+        }
+
+    }
+
+
+
+    async function sendSolve(solvetk) {
+        const accessToken = localStorage.getItem("access_token");
+        for (const task of solvetk) {
+            if (task.hasChanged) {
+                const finalTask = {
+                    name: task.name,
+                    details: task.description,
+                    budget: task.budget,
+                    proposed_end_date: task.end instanceof Date ? task.end.toISOString().split("T")[0] : task.end,
+                    estimated_time: task.estimated_time,
+                    location: task.location,
+                    stakeholder: task.stakeholder,
+                    proposed_start_date: task.start instanceof Date ? task.start.toISOString().split("T")[0] : task.start,
+                    status: "ProposedByAdmin",
+                    tag: task.tag,
+                    start_date: null,
+                    end_date: null,
+                };
+
+
+                console.log(finalTask);
+
+
+                await decline(task);
+
+                const resp = await fetch(`${baseUrl}/works/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify(finalTask),
+                });
+
+                const res = await resp.json();
+                console.log("Response:", res);
+            } else {
+                if(task.status !== "Planned"){
+                    await accept(task)
+                }
+            }
+        }
+
+        alert("Done :D")
+    }
     const [tk, setTk] = useState(tasks);
     const isOverlapping = hasDayOverlap(tk);
 
@@ -218,7 +327,12 @@ function ConflictGroup({ tasks, idx, onMapClick }) {
                     <button
                         className={`action-button submit ${isOverlapping ? 'disabled' : ''}`}
                         disabled={isOverlapping}
-                        onClick={() => !isOverlapping && console.log("Sending solution...")}
+                        onClick={() => {
+                            if (!isOverlapping) {
+                                console.log(tk)
+                                sendSolve(tk)
+                            }
+                        }}
                     >
                         সমাধান প্রেরণ
                     </button>
@@ -233,15 +347,17 @@ function ConflictChart({ initialTasks, onTasksChange }) {
     const [tasks, setTasks] = useState(initialTasks);
 
     const handleTaskChange = (task) => {
-        
+
         if (task.status === "Planned") {
-            console.log("here")
+
             return;
         }
 
         const newTasks = tasks.map((t) => (t.id === task.id ? task : t));
+        task.hasChanged = true;
         setTasks(newTasks);
         onTasksChange?.(newTasks);
+        console.log(task)
     };
 
 

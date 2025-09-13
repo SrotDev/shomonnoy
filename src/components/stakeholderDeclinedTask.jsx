@@ -91,12 +91,12 @@ export default function StakeholderDeclinedTask() {
                             {tasks.map((item, idx) => (
                                 <motion.div key={idx} className="flex flex-col text-black my-2 mx-5 bg-red-100 rounded-4xl w-[calc(70vw)] py-5 px-5 shadow-[4px_6px_20px_1px_rgba(0,0,0,0.25)]" whileHover={{ scale: 1.02 }}>
                                     <div className="flex flex-row items-center">
-                                        <p style={{ fontSize: '1.4rem' }}>{item.id}</p>
-                                        {item.isEmergency && <motion.div className="bg-[rgb(252,210,220)] rounded-3xl px-3 py-1 text-center font-bold ml-7"><p style={{ color: 'red', fontSize: '0.7rem' }}>জরুরী</p></motion.div>}
+                                        <p style={{ fontSize: '1.4rem' }}>{item.name}</p>
+                                        {item.tag === "Emergency" && <motion.div className="bg-[rgb(252,210,220)] rounded-3xl px-3 py-1 text-center font-bold ml-7"><p style={{ color: 'red', fontSize: '0.7rem' }}>জরুরী</p></motion.div>}
                                     </div>
                                     <div className="mt-2"></div>
                                     <div className="flex flex-row justify-between items-center">
-                                        <p style={{ fontSize: '1.2rem' }}>{item.from} - {item.to}</p>
+                                        <p style={{ fontSize: '1.2rem' }}>{item.proposed_start_date} - {item.proposed_end_date}</p>
                                         <div className="flex flex-row justify-center">
                                             <motion.div className="w-8 h-8 mr-1 rounded-lg bg-contain bg-center bg-no-repeat m-1" style={{ backgroundImage: `url(${pointLogo})` }} initial={{ backgroundColor: "#FFFFFF" }} whileHover={{ backgroundColor: "#FFE4E4FF", scale: 1.1 }} onClick={() => handleOpenMap(item)} />
                                         </div>

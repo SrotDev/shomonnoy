@@ -127,7 +127,7 @@ const MapView = ({ requestData, isCompany = false }) => {
         properties: {
           name: requestData.city || "Unknown Location",
           company: "N/A",
-          status: "Planned",
+          status: requestData.status,
           timeline: requestData.proposed_start_date + "-" + requestData.proposed_end_date,
           reason: requestData.details 
         },
