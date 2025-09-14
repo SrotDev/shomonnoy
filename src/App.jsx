@@ -16,6 +16,8 @@ import AuthorityWorkRequests from './pages/authorityWorkRequests';
 import AuthorityWorkReqConflicted from './components/authorityWorkReqConflict';
 import AuthorityConflictChart from './pages/authorityConflictChart';
 import RequestWorkPage from './pages/RequestWorkPage';
+import AdminRequestWorkPage from './pages/authorityNewReq';
+import AuthorityMap from './pages/authoritymap';
 const userLoggedIn = true;
 
 function App() {
@@ -43,21 +45,23 @@ function App() {
             }
           />
 
-        <Route path="/stakeholder/requestWork" element={<RequestWorkPage />}></Route>
         
         <Route path="/authenticate" element={<Authentication/>}/>
 
 
-        <Route path="/stakeholder" element={<StakeholderDashboard /> } />
-        
-        <Route path="/stakeholder/pending-requests" element={<StakeholderWorkReq />} />
-        
+        <Route path="/stakeholder" element={<StakeholderDashboard /> } />        
+        <Route path="/stakeholder/requestWork" element={<RequestWorkPage />}></Route>
+        <Route path="/stakeholder/pending-requests" element={<StakeholderWorkReq />} />        
         <Route path="/stakeholder/noticeboard" element={<NoticePage state="normal"/>} />
          
         <Route path="/authority" element={<AuthorityDashboard />} />
         <Route path="/authority/work-requests" element={<AuthorityWorkRequests/>} />
         <Route path="/authority/conflict-chart" element={<AuthorityConflictChart/>} />
         <Route path="/authority/noticeboard" element={<NoticePage state="admin"/>} />
+        <Route path="/authority/requestWork" element={<AdminRequestWorkPage/>} />
+        <Route path="/authority/map" element={<AuthorityMap/>} />
+        
+        
          
         </Routes>
       </main>

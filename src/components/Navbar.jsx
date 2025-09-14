@@ -38,8 +38,7 @@ const authority_LoginItems = [
     { id: 3, title: "নোটিফিকেশন প্যানেল", path: "/authority/notifications" },
     { id: 4, title: "সচল রিপোর্টসমূহ", path: "/authority/work-requests" },
     { id: 5, title: "কনফ্লিক্ট চার্ট", path: "/authority/conflict-chart" },
-    { id: 6, title: "নতুন রিপোর্ট তৈরী", path: "/authority/request-work" },
-
+    { id: 6, title: "নতুন রিপোর্ট তৈরী", path: "/authority/requestWork" },
     { id: 7, "title": "মানচিত্র দেখুন", path: "/authority/map" },
     { id: 8, title: "লগআউট", path: "/authority/logout" }
 ]

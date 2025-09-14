@@ -7,6 +7,7 @@ import MapSidePanel from '../components/Map/MapSidePanel';
 
 import ViewOnlyMap from '../components/Map/ViewOnlyMap.jsx';
 import PreLoader2 from './LoadingPage.jsx';
+import '../components/Map/MapSidePanel.css';
 
 
 const baseUrl = import.meta.env.VITE_BASE_URL;
@@ -14,7 +15,7 @@ const baseUrl = import.meta.env.VITE_BASE_URL;
 const LandingPage = () => {
   const [carPosition, setCarPosition] = useState(12);
   const [navState, setNavState] = useState("non_logged_in");
-  const [navName , setNavName] = useState("");
+  const [navName, setNavName] = useState("");
   const [isLoading, setIsLoading] = useState(true)
 
   const Navigate = useNavigate()
@@ -61,29 +62,31 @@ const LandingPage = () => {
           });
 
           const userData = await userInfo.json()
+
+          console.log(userData)
           if (!userInfo.ok) {
             console.log("Here")
             localStorage.removeItem("refresh_token");
             localStorage.removeItem("access_token")
             localStorage.removeItem("uuid")
             Navigate("/authenticate")
-          }else{
+          } else {
             localStorage.setItem('uuid', userData.uuid)
-            if(userData.role === "citizen"){
+            if (userData.role === "citizen") {
               setNavState("user_logged_in");
-              
-            }else if (userData.role === "stakeholder"){
+
+            } else if (userData.role === "stakeholder") {
               setNavState("stakeholder_logged_in")
-            }else {
+            } else {
               setNavState("authority_logged_in")
             }
 
             setNavName(userData.name)
           }
 
-          
 
-          
+
+
 
 
         } else {
@@ -137,7 +140,7 @@ const LandingPage = () => {
 
   return (
     <>
-      <Navbar state={navState} name={navName}/>
+      <Navbar state={navState} name={navName} />
       <div className="landing-page-wrapper">
         <div className="landing-hero-section">
           <h1 className="landing-title">সমন্বয়</h1>
@@ -171,15 +174,17 @@ const LandingPage = () => {
           <div className="map-side-panel">
             <div className="mt-20">
               <h2>সরাসরি প্রকল্পের মানচিত্র</h2>
+
             </div>
             <p>শহর জুড়ে বিভিন্ন সংস্থার চলমান এবং পরিকল্পিত কাজগুলি দেখুন।</p>
+
+
             <ul className="map-legend">
-              <li><span className="color-dot wasa"></span>ওয়াসা</li>
-              <li><span className="color-dot desco"></span>ডেসকো / ডিপিডিসি</li>
-              <li><span className="color-dot rhd"></span>সওজ</li>
-              <li><span className="color-dot btcl"></span>বিটিসিএল</li>
-              <li><span className="color-dot other"></span>অন্যান্য</li>
+              <li><span className="color-dot planned"></span>পরিকল্পিত (Planned)</li>
+              <li><span className="color-dot ongoing"></span>চলমান (Ongoing)</li>
+              <li><span className="color-dot completed"></span>সম্পন্ন (Completed)</li>
             </ul>
+
             <div className="map-panel-footer">
               <p>যেকোনো চিহ্নিত রাস্তায় ক্লিক করে প্রকল্পের বিস্তারিত তথ্য দেখুন।</p>
             </div>

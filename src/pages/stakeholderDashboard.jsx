@@ -156,6 +156,9 @@ export default function StakeholderDashboard() {
                             // onTap={{
                             //     scale : 0.9,
                             // }}
+                            onClick={()=>{
+                                Navigate('/stakeholder/requestWork')
+                            }}
                         ><p>নতুন রিপোর্ট তৈরি </p></motion.div>
                         <motion.div className="bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold cursor-pointer"
                             whileHover={{

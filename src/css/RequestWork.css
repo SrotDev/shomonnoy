@@ -32,7 +32,7 @@
 
 .work-request-form-container {
     position: absolute;
-    top: 2rem;
+    top: 1rem;
     right: 2rem;
     z-index: 1000;
     width: 420px; 
@@ -41,8 +41,9 @@
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid hsla(220, 25%, 85%, 0.5);
     border-radius: 1.5rem;
-    padding: 2.5rem;
+    padding: 1.5rem;
     box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.25);
+    height: 95%;
 }
 
 .work-request-form-container h2 {
@@ -61,14 +62,14 @@
     font-size: 0.9rem;
     font-weight: 600;
     color: #4A5568;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.2rem;
 }
 
 
 .form-group input,
 .form-group textarea {
     width: 100%;
-    padding: 0.85rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 0.75rem; 
     border: 1px solid #CBD5E0;
     background-color: #FFFFFF;

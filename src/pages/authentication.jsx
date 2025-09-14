@@ -58,9 +58,9 @@ export default function Authentication() {
         }
     }
 
+    
 
-
-    async function handleLogin() {
+    async function handleLogin(email, password, role ) {
         setLoginError("");
 
         if (!email) {
@@ -72,6 +72,7 @@ export default function Authentication() {
             return;
         }
         try {
+            console.log(email + " " + password + " " + role)
             const response = await fetch(`${baseUrl}/auth/login/`, {
                 method: 'POST',
                 headers: {
@@ -94,6 +95,8 @@ export default function Authentication() {
             if (data.refresh) localStorage.setItem('refresh_token', data.refresh);
             if (data.access) localStorage.setItem('access_token', data.access);
 
+            console.log(data.access)
+        
             
 
             if (data.role === 'authority') {
@@ -148,12 +151,10 @@ export default function Authentication() {
             if (!response.ok) {
                 throw new Error(data.message || 'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
             } else {
-                setPassword(regPassword);
-                setEmail(regEmail);
-                setRole(regRole)
-                handleLogin()
+
+                await handleLogin(regEmail, regPassword, regRole)
             }
-            // Registration success logic here (e.g., navigate, show message)
+            
             return data;
         } catch (error) {
             setRegisterError(error.message || 'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
@@ -356,7 +357,7 @@ export default function Authentication() {
                         </div>
                         <div className="mt-5"></div>
                         <motion.div
-                            onClick={() => { handleLogin() }}
+                            onClick={() => { handleLogin(email,password, role) }}
                             className="cursor-pointer px-6 py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md text-center select-none"
                             whileHover={{
                                 scale: 1.02,

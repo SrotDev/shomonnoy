@@ -122,7 +122,7 @@ export default function ConflictChartWithButtons({ onMapClick }) {
                     stakeholder: task.stakeholder,
                     start_date: task.start_date,
                     status: task.status,
-                    tag: task.tag,
+                    tag: task.tag, 
                     updated_at: task.updated_at,
                 });
             }

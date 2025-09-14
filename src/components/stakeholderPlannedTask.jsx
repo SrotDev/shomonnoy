@@ -18,6 +18,58 @@ export default function StakeholderPlannedTask() {
     const [selectedTask, setSelectedTask] = useState(null);
     const [coords, setCoords] = useState(null);
 
+    async function accept(item){
+        console.log(item)
+        const accessToken = localStorage.getItem("access_token");
+        const response = await fetch(`${baseUrl}/works/${item.uuid}/`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                status: "ProposedByStakeholder"
+            }),
+        })
+
+
+
+        const resp = await response.json()
+
+        if (!response.ok) {
+            console.log("error")
+        } else {
+            alert("Work request has been successfully accepted!");
+            window.location.reload();
+        }
+    }
+
+    async function decline(item){
+        console.log(item)
+        const accessToken = localStorage.getItem("access_token");
+        const response = await fetch(`${baseUrl}/works/${item.uuid}/`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                status: "Declined"
+            }),
+        })
+
+
+
+        const resp = await response.json()
+
+        if (!response.ok) {
+            console.log("error")
+        } else {
+            alert("Work request has been successfully declined!");
+            window.location.reload();
+        }
+    }
+
     const handleOpenMap = async (task) => {
         // const location_uuid = task.location;
         // console.log(location_uuid)
@@ -119,10 +171,10 @@ export default function StakeholderPlannedTask() {
                                     <div className="flex flex-row justify-between items-center">
                                         <p style={{ fontSize: '1.2rem' }}>{item.proposed_start_date} - {item.proposed_end_date}</p>
                                         <div className="flex flex-row justify-center">
-                                            <motion.div className="w-8 h-8 rounded-lg bg-contain bg-center bg-no-repeat m-1" style={{ backgroundImage: `url(${rightLogo})` }} initial={{ backgroundColor: "#FFFFFF" }} whileHover={{ backgroundColor: "#E2FBD3", scale: 1.1 }} onClick={() => null} />
+                                            <motion.div className="w-8 h-8 rounded-lg bg-contain bg-center bg-no-repeat m-1" style={{ backgroundImage: `url(${rightLogo})` }} initial={{ backgroundColor: "#FFFFFF" }} whileHover={{ backgroundColor: "#E2FBD3", scale: 1.1 }} onClick={() => {accept(item)}} />
                                             <motion.div className="w-8 h-8 mr-1 rounded-lg bg-contain bg-center bg-no-repeat m-1" style={{ backgroundImage: `url(${pointLogo})` }} initial={{ backgroundColor: "#FFFFFF" }} whileHover={{ backgroundColor: "#E2FBD3", scale: 1.1 }} onClick={() => handleOpenMap(item)} />
-                                            <motion.div className="w-8 h-8 rounded-lg bg-contain bg-center bg-no-repeat m-1" style={{ backgroundImage: `url(${reloadLogo})` }} initial={{ backgroundColor: "#FFFFFF" }} whileHover={{ backgroundColor: "#C1E6FAFF", scale: 1.1 }} onClick={() => null} />
-                                            <motion.div className="w-8 h-8 rounded-lg bg-contain bg-center bg-no-repeat m-1" style={{ backgroundImage: `url(${crossLogo})` }} initial={{ backgroundColor: "#FFFFFF" }} whileHover={{ backgroundColor: "#FFE4E4FF", scale: 1.1 }} onClick={() => null} />
+                                            {/* <motion.div className="w-8 h-8 rounded-lg bg-contain bg-center bg-no-repeat m-1" style={{ backgroundImage: `url(${reloadLogo})` }} initial={{ backgroundColor: "#FFFFFF" }} whileHover={{ backgroundColor: "#C1E6FAFF", scale: 1.1 }} onClick={() => null} /> */}
+                                            <motion.div className="w-8 h-8 rounded-lg bg-contain bg-center bg-no-repeat m-1" style={{ backgroundImage: `url(${crossLogo})` }} initial={{ backgroundColor: "#FFFFFF" }} whileHover={{ backgroundColor: "#FFE4E4FF", scale: 1.1 }} onClick={() => decline(item)} />
                                         </div>
                                     </div>
                                 </motion.div>

@@ -264,6 +264,7 @@ export default function RequestWorkPage() {
                 geometry={drawnGeometry}
                 onSubmit={handleFinalSubmit}
                 onCancel={() => setDrawnGeometry(null)}
+                state="stakeholder"
               />
             )}
           </AnimatePresence>

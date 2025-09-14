@@ -53,7 +53,7 @@ export default function AuthorityWorkReqConflicted({ onShowMap }) {
     const navigate = useNavigate()
 
     async function decline(item) {
-        console.log(item)
+        
         const accessToken = localStorage.getItem("access_token");
         const response = await fetch(`${baseUrl}/works/${item.uuid}/`, {
             method: 'PATCH',
@@ -166,6 +166,9 @@ export default function AuthorityWorkReqConflicted({ onShowMap }) {
                                     className="bg-green-600 text-white font-bold py-2 px-5 rounded-lg shadow-sm hover:bg-green-700 transition-all"
                                     whileHover={{ scale: 1.05, y: -2 }}
                                     whileTap={{ scale: 0.95 }}
+                                    onClick={() => {
+                                        navigate('/authority/conflict-chart')
+                                    }}
                                 >
                                     মীমাংসা করুন
                                 </motion.button>
