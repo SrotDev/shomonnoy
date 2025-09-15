@@ -7,7 +7,7 @@
     position: fixed;
     display: flex;
     z-index: 1000;
-    background-color: rgba(33, 177, 139, 0.6);
+    background-color: rgba(33, 177, 139, 0.5);
     justify-content: space-between;
     z-index: 10000;
 

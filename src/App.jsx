@@ -20,6 +20,7 @@ import AdminRequestWorkPage from './pages/authorityNewReq';
 import AuthorityMap from './pages/authoritymap';
 import ClientNotification from './pages/ClientNotification';
 import ClientFeedback from './pages/ClientFeedback';
+import FeedbackReceivingPage from './pages/feedbackRecivingPage';
 const userLoggedIn = true;
 
 function App() {
@@ -56,13 +57,18 @@ function App() {
         <Route path="/stakeholder/requestWork" element={<RequestWorkPage />}></Route>
         <Route path="/stakeholder/pending-requests" element={<StakeholderWorkReq />} />        
         <Route path="/stakeholder/noticeboard" element={<NoticePage state="normal"/>} />
+        <Route path="/stakeholder/feedback" element={<FeedbackReceivingPage/>}/>
+        <Route path="/stakeholder/notifications" element={<ClientNotification/>}/>
+        
          
         <Route path="/authority" element={<AuthorityDashboard />} />
         <Route path="/authority/work-requests" element={<AuthorityWorkRequests/>} />
         <Route path="/authority/conflict-chart" element={<AuthorityConflictChart/>} />
         <Route path="/authority/noticeboard" element={<NoticePage state="admin"/>} />
         <Route path="/authority/requestWork" element={<AdminRequestWorkPage/>} />
+        <Route path="/authority/feedback" element={<FeedbackReceivingPage />} />
         <Route path="/authority/map" element={<AuthorityMap/>} />
+        <Route path="/authority/notifications" element={<ClientNotification/>}/>
         
         
          

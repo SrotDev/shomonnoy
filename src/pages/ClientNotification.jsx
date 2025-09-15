@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Navbar from "../components/Navbar";
 import PreLoader2 from "./LoadingPage";
+import { Link, useNavigate } from "react-router-dom"
 
 const baseUrl = "https://shomonnoy-backend.onrender.com/api";
 
@@ -46,7 +47,7 @@ const mockNotifications = [
     updated_at: "2025-09-09T14:00:00Z",
     is_read: true,
   },
-    {
+  {
     uuid: "4d5e6f7g",
     title: "Welcome to Shomonnoy",
     message: "Thank you for registering. Explore your dashboard to get started!",
@@ -55,7 +56,7 @@ const mockNotifications = [
     created_at: "2025-09-09T14:00:00Z",
     updated_at: "2025-09-09T14:00:00Z",
     is_read: true,
-  },  {
+  }, {
     uuid: "4d5e6f7g",
     title: "Welcome to Shomonnoy",
     message: "Thank you for registering. Explore your dashboard to get started!",
@@ -64,7 +65,7 @@ const mockNotifications = [
     created_at: "2025-09-09T14:00:00Z",
     updated_at: "2025-09-09T14:00:00Z",
     is_read: true,
-  },  {
+  }, {
     uuid: "4d5e6f7g",
     title: "Welcome to Shomonnoy",
     message: "Thank you for registering. Explore your dashboard to get started!",
@@ -86,14 +87,14 @@ export default function ClientNotification() {
   const [uuid, setUuid] = useState("");
   const [notifications, setNotifications] = useState([]);
 
+  const navigate = useNavigate();
+
   // Check user session and get profile
   async function fetchUser() {
     try {
       const accessToken = localStorage.getItem("access_token");
       if (!accessToken) {
-        setNavState("non_logged_in");
-        setNavName("Login");
-        setIsLoading(false);
+        navigate("/authenticate");
         return;
       }
 
@@ -109,16 +110,19 @@ export default function ClientNotification() {
       if (!res.ok) {
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
-        window.location.href = "/authenticate";
+        navigate("/authenticate");
         return;
       }
 
-      if (data.role === "citizen") setNavState("user_logged_in");
-      else {
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-        window.location.href = "/authenticate";
+      if (data.role === "citizen") {
+        setNavState("user_logged_in");
+
+      } else if (data.role === "stakeholder") {
+        setNavState("stakeholder_logged_in")
+      } else {
+        setNavState("authority_logged_in")
       }
+
 
       setNavName(data.name);
       setUuid(data.uuid);
@@ -193,7 +197,7 @@ export default function ClientNotification() {
                 key={notif.uuid}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
-                whileHover={{ scale : 1.01}}
+                whileHover={{ scale: 1.01 }}
                 transition={{ duration: 0.3 }}
                 className={`p-4 rounded-xl shadow-md ${getGenreColor(
                   notif.genre
