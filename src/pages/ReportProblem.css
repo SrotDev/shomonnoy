@@ -1,4 +1,4 @@
-
+@import "tailwindcss";
 
 body, html {
   margin: 0;
@@ -103,6 +103,7 @@ body, html {
     border: 1px solid #a7e0c6;
     border-radius: 14px;
     color: #ffffff;
+    font : #ffffff;
     font-size: 1rem;
     transition: all 0.3s ease;
 }

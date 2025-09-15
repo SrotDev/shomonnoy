@@ -61,15 +61,15 @@ const ReportProblem = () => {
 
           const userData = await userInfo.json()
           if (!userInfo.ok) {
-            console.log("Here")
+           
             localStorage.removeItem("refresh_token");
             localStorage.removeItem("access_token")
             Navigate("/authenticate")
           } else {
-            if (userData.role === "stakeholder") {
-              setNavState("stakeholder_logged_in")
+            if (userData.role === "citizen") {
+              setNavState("user_logged_in")
             } else {
-              console.log("Here")
+              
               localStorage.removeItem("refresh_token");
               localStorage.removeItem("access_token")
               Navigate("/authenticate")
@@ -96,9 +96,7 @@ const ReportProblem = () => {
       }
     }
 
-    async function getUserRole(accessToken) {
 
-    }
 
 
 
@@ -111,6 +109,32 @@ const ReportProblem = () => {
       if (intervalId) clearInterval(intervalId);
     };
   }, []);
+
+  async function submitReport(report) {
+    console.log(report)
+    const accessToken = localStorage.getItem('access_token')
+    const response = await fetch(`${baseUrl}/reports/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        status: 'Pending',
+        report_type : report.issueType,
+        details: report.description
+      })
+    })
+
+    const resp = await response.json
+
+    if(!response.ok){
+      alert("Something went wrong.")
+    }else{
+      alert('Report Submitted Successfully.')
+      Navigate('/')
+    }
+  }
 
 
 
@@ -130,7 +154,7 @@ const ReportProblem = () => {
             <img
               src={illustrationImage}
               alt="Citizen Report Illustration"
-              className="illustration"
+              className="illustration rounded-lg"
             />
           </div>
 
@@ -154,8 +178,8 @@ const ReportProblem = () => {
               </div>
               <div className="form-group">
                 <label htmlFor="description">Describe the issue briefly</label>
-                <textarea id="description" name="description" className="form-control" placeholder="Provide details like landmark, severity, etc." value={formData.description} onChange={handleChange} required /></div>
-              <button type="submit" className="submit-btn">Submit Report</button>
+                <textarea id="description" name="description" className="form-control " placeholder="Provide details like landmark, severity, etc." value={formData.description} onChange={handleChange} required /></div>
+              <button type="submit" className="submit-btn" onClick={() => { submitReport(formData) }}>Submit Report</button>
             </form>
           </div>
         </div>
