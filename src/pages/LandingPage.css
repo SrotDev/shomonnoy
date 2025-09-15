@@ -6,7 +6,7 @@
   height: 100vh;
   position: relative;
   overflow: hidden;
-  background: linear-gradient(to bottom, #80c3c0, #f0c8a8);
+  background: transparent;
 }
 
 .landing-title {

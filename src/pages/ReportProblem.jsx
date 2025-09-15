@@ -126,7 +126,7 @@ const ReportProblem = () => {
       })
     })
 
-    const resp = await response.json
+    const resp = await response.json()
 
     if(!response.ok){
       alert("Something went wrong.")

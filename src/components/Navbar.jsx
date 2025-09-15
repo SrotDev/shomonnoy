@@ -3,7 +3,7 @@ import { easeInOut, motion, rgba } from "framer-motion"
 import { useState } from "react";
 import { FiBell } from "react-icons/fi"
 
-import logo from '../assets/logo.png'
+import logo from '../assets/loogo.png'
 
 import '../css/navbar.css'
 
@@ -73,20 +73,20 @@ export default function Navbar({ state, name }) {
     return (
         <motion.div
             className="navbar-container fixed top-0 left-[16px] right-[31px] 
-             flex flex-row rounded-lg shadow-[4px_2px_20px_10px_rgba(0,0,0,0.25)] bg-white/90 backdrop-blur-md"
+             flex flex-row rounded-full shadow-[4px_2px_20px_10px_rgba(0,0,0,0.25)] bg-white/90 backdrop-blur-md"
 
-            whileHover={{ backgroundColor: "rgba(70,200,70,1)" }}
+            whileHover={{ backgroundColor: "rgba(70,200,70,.8)" }}
 
         // transition={{ ease: "easeInOut", duration: 0.2 }}
         >
 
             <div className="flex flex-row">
                 <div> {/*Logo*/}
-                    <img className="w-14 mt-1 ml-2" src={logo} alt="Logo" />
+                    <img className="w-10 mt-3 ml-4 border-amber-50 rounded-full" src={logo} alt="Logo" />
                 </div>
 
 
-                <div className="flex flex-row text-white py-5 px-10 gap-8"> {/* Navbar Links*/}
+                <div className="flex flex-row text-white py-5 px-6 gap-8"> {/* Navbar Links*/}
 
                     {state === "non_logged_in" && non_LoginItems.map((item) => {
                         if (item.path === "/authority/logout") {
