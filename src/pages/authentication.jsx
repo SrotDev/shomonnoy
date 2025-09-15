@@ -10,6 +10,8 @@ export default function Authentication() {
 
     const [isLoading, setIsLoading] = useState(true)
 
+    const [isFetching, setIsFetching] = useState(false)
+
 
     const navigate = useNavigate();
 
@@ -61,6 +63,7 @@ export default function Authentication() {
     
 
     async function handleLogin(email, password, role ) {
+        setIsFetching(true)
         setLoginError("");
 
         if (!email) {
@@ -113,6 +116,7 @@ export default function Authentication() {
 
 
     async function handleRegister() {
+        setIsFetching(true)
         setRegisterError("");
         let formData = {};
         if (regRole === "citizen") {
@@ -151,7 +155,6 @@ export default function Authentication() {
             if (!response.ok) {
                 throw new Error(data.message || 'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
             } else {
-
                 await handleLogin(regEmail, regPassword, regRole)
             }
             
@@ -434,7 +437,8 @@ export default function Authentication() {
                                         whileTap={{ scale: 0.95 }}
                                         transition={{ type: "spring", stiffness: 300, damping: 20 }}
                                     >
-                                        সাবমিট করুন
+                                        {!isFetching && <span>সাবমিট করুন</span>}
+                                        
                                     </motion.div>
                                 </div>
                                 <div className="col-span-2"> {/* Register Error */}</div>

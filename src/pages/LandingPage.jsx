@@ -158,7 +158,7 @@ const LandingPage = () => {
 
         <div className="scrollable-content">
 
-          <h2>שহরের উন্নয়নে এক নতুন দৃষ্টিভঙ্গি</h2>
+          <h2>শহরের উন্নয়নে এক নতুন দৃষ্টিভঙ্গি</h2> 
           <p>সমন্বয় একটি যুগান্তকারী প্ল্যাটফর্ম যা নাগরিক, কর্তৃপক্ষ (যেমন সিটি কর্পোরেশন) এবং স্টেকহোল্ডারদের (যেমন ওয়াসা, ডেসকো) একত্রিত করে সকল প্রকার উন্নয়নমূলক কাজ স্বচ্ছতা ও দক্ষতার সাথে পরিচালনা করে।</p>
           <div className="features">
             <div className="feature-card"><div className="feature-card-icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" /></svg></div><h3>নাগরিক অভিযোগ</h3><p>নাগরিকরা সরাসরি মানচিত্রে ভাঙা রাস্তা বা ড্রেনের মতো সমস্যা চিহ্নিত করতে পারেন।</p></div>

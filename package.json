@@ -1,10 +1,13 @@
 {
-  "name": "somonnoy-bd",
+  "homepage": "https://srotdev.github.io/somonnoy",
+  "name": "somonnoy",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -16,6 +19,7 @@
     "express": "^5.1.0",
     "framer-motion": "^12.23.12",
     "gantt-task-react": "^0.3.9",
+    "gh-pages": "^6.3.0",
     "leaflet": "^1.9.4",
     "leaflet-control-geocoder": "^3.3.0",
     "leaflet-draw": "^1.0.4",
