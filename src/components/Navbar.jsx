@@ -15,8 +15,6 @@ const non_LoginItems = [
 
 const user_LoginItems = [
     { id: 1, title: "হোম", path: "/" },
-    //{ id: 2, title: "নোটিশ বোর্ড", path: "/noticeboard" },
-    //{ id: 3, title: "নোটিফিকেশন প্যানেল", path: "/notifications" },
     { id: 3, title: "অভিযোগ", path: "/complaint/issueReporting" },
     { id: 4, title: "ফিডব্যাক", path: "/feedback" },
     { id: 5, title: "নোটিশ বোর্ড", path: "/noticeboard" },
@@ -26,7 +24,7 @@ const user_LoginItems = [
 const stakeHolder_LoginItems = [
     { id: 1, title: "হোম", path: "/stakeholder" },
     { id: 2, title: "নোটিশ বোর্ড", path: "/noticeboard" },
-    { id: 3, title: "নোটিফিকেশন প্যানেল", path: "/stakeholder/notifications" },
+
     { id: 3, title: "সচল রিপোর্টসমূহ", path: "/stakeholder/pending-requests" },
     { id: 4, title: "নতুন রিপোর্ট তৈরী", path: "/stakeholder/requestWork" },
     { id: 5, title: "ফিডব্যাক", path: "/stakeholder/feedback" },
@@ -36,11 +34,11 @@ const stakeHolder_LoginItems = [
 const authority_LoginItems = [
     { id: 1, title: "হোম", path: "/authority" },
     { id: 2, title: "নোটিশ বোর্ড", path: "/authority/noticeboard" },
-    { id: 3, title: "নোটিফিকেশন প্যানেল", path: "/authority/notifications" },
+
     { id: 4, title: "সচল রিপোর্টসমূহ", path: "/authority/work-requests" },
     { id: 5, title: "কনফ্লিক্ট চার্ট", path: "/authority/conflict-chart" },
     { id: 6, title: "নতুন রিপোর্ট তৈরী", path: "/authority/requestWork" },
-    { id: 7, "title": "মানচিত্র দেখুন", path: "/authority/map" },
+    { id: 7, title: "মানচিত্র দেখুন", path: "/authority/map" },
     { id: 8, title: "লগআউট", path: "/authority/logout" }
 ]
 
@@ -82,7 +80,7 @@ export default function Navbar({ state, name }) {
 
             <div className="flex flex-row">
                 <div> {/*Logo*/}
-                    <img className="w-10 mt-3 ml-4 border-amber-50 rounded-full" src={logo} alt="Logo" />
+                    <img className="w-10 mt-5 ml-4 border-amber-50 rounded-full" src={logo} alt="Logo" />
                 </div>
 
 

@@ -1,13 +1,56 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useCallback, useEffect } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Link, useNavigate } from "react-router-dom"
+
+const baseUrl = import.meta.env.VITE_BASE_URL;
 
 export default function WorkRequestForm({ geometry, onSubmit, onCancel, state }) {
+  const [stakeholders, setStakeholders] = useState([]);
+
+
+  useEffect(() => {
+    async function fetchStakeholders() {
+      const accessToken = localStorage.getItem("access_token");
+      if (!accessToken) return;
+
+      try {
+        const response = await fetch(`${baseUrl}/users/`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          console.error("Failed to fetch stakeholders");
+          return;
+        }
+
+        const users = await response.json();
+        console.log(users)
+        const onlyStakeholders = users.filter(u => u.role === "stakeholder");
+        setStakeholders(onlyStakeholders);
+      } catch (err) {
+        console.error("Error fetching stakeholders:", err);
+      }
+    }
+    if(state === "Admin"){
+
+      fetchStakeholders();
+    }
+  }, []);
+
+
+
   const [formData, setFormData] = useState({
+    uuid: '',
     startDate: '',
     endDate: '',
     reason: '',
-
+    city: '',
     budget: '',
+    days: 0,
     isEmergency: false,
   });
 
@@ -56,6 +99,18 @@ export default function WorkRequestForm({ geometry, onSubmit, onCancel, state })
           <textarea id="reason" name="reason" value={formData.reason} onChange={handleChange} required placeholder="e.g., Main water pipeline repair..."></textarea>
         </div>
 
+        <div className="form-group">
+          <label htmlFor="budget">City</label>
+          <input
+            type="text"
+            id="city"
+            name="city"
+            value={formData.city}
+            onChange={handleChange}
+            required
+            placeholder="e.g. Dhaka"
+          />
+        </div>
 
         <div className="form-group">
           <label htmlFor="budget">Budget (in BDT)</label>
@@ -69,20 +124,53 @@ export default function WorkRequestForm({ geometry, onSubmit, onCancel, state })
             placeholder="e.g., 50000"
           />
         </div>
-        {
-          state === "Admin" && <div className="form-group">
-            <label htmlFor="Stakeholder name">Stakeholder Name</label>
-            <input
-              type="text"
-              id="stakeholder"
-              name="stakeholder"
 
-              onChange={handleChange}
-              required
-              placeholder="e.g., WASA"
-            />
-          </div>
+
+        <div className="form-group">
+          <label htmlFor="days">Estimated time (in days)</label>
+          <input
+            type="number"
+            id="days"
+            name="days"
+            value={formData.days}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              if (value > 0 || e.target.value === "") {
+                handleChange(e); 
+              }
+            }}
+            required
+            placeholder="e.g., 50"
+            min={1}  
+            step={1}  
+          />
+        </div>
+
+
+
+
+        {
+          state === "Admin" && (
+            <div className="form-group">
+              <label htmlFor="stakeholder">Stakeholder Name</label>
+              <select
+                id="uuid"
+                name="uuid"
+                value={formData.uuid || ""}
+                onChange={handleChange}
+                required
+              >
+                <option value="">-- Select Stakeholder --</option>
+                {stakeholders.map((s) => (
+                  <option key={s.uuid} value={s.uuid}>
+                    {s.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )
         }
+
 
 
 

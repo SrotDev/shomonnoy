@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import '../css/authentication.css'
 import Navbar from "../components/Navbar";
 import './LandingPage.css';
+import back from '../assets/back.png';
 import '../css/authorityDashboard.css'
 import PreLoader2 from "./LoadingPage";
 
@@ -135,43 +136,48 @@ export default function StakeholderDashboard() {
         <>
             <Navbar state={navState} name={navName}></Navbar>
             <div className="landing-hero-section">
-                <div className="flex flex-col items-center justify-center">
-                    <h1 className="landing-title">সমন্বয়</h1>
-                    <div className="flex flex-row gap-40 home-buttons">
-                        <motion.div className="bg-[rgb(114,198,158)]  rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold cursor-pointer"
+                {/* <h1 className="landing-title">সমন্বয়</h1> */}
+                <div className="scene-container">
+                    <img src={back} alt="City Background" />
+                </div>
+            
+                <div className="flex flex-col items-center">
+                    {/* <h1 className="landing-title">সমন্বয়</h1> */}
+                    <div className="flex flex-row gap-33 home-buttons">
+                        <motion.div className="bg-[rgb(114,198,158)]  rounded-3xl px-14 py-2 text-white text-center shadow-[8px_4px_20px_4px_rgba(0,0,0,0.32)] backdrop-blur-md font-bold cursor-pointer"
                             whileHover={{
                                 scale: 1.1,
                             }}
                             onClick={() => {
                                 Navigate('/stakeholder/pending-requests')
                             }}
-                            // onTap={{
-                            //     scale : 0.9,
-                            // }}
+                        // onTap={{
+                        //     scale : 0.9,
+                        // }}
                         ><p>সচল রিপোর্টসমূহ</p></motion.div>
-                        <motion.div className=" bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold cursor-pointer"
+                        <motion.div className=" bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[8px_4px_20px_4px_rgba(0,0,0,0.32)] backdrop-blur-md font-bold cursor-pointer"
                             whileHover={{
                                 scale: 1.1,
                             }}
                             // onTap={{
                             //     scale : 0.9,
                             // }}
-                            onClick={()=>{
+                            onClick={() => {
                                 Navigate('/stakeholder/requestWork')
                             }}
                         ><p>নতুন রিপোর্ট তৈরি </p></motion.div>
-                        <motion.div className="bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[4px_2px_10px_2px_rgba(0,0,0,0.12)] backdrop-blur-md font-bold cursor-pointer"
+                        <motion.div className="bg-[rgb(114,198,158)] rounded-3xl px-14 py-2 text-white text-center shadow-[8px_4px_20px_4px_rgba(0,0,0,0.32)] backdrop-blur-md font-bold cursor-pointer"
                             whileHover={{
                                 scale: 1.1,
                             }}
-                            // onTap={{
-                            //     scale : 0.9,
-                            // }}
+                        // onTap={{
+                        //     scale : 0.9,
+                        // }}
                         ><p>ফিডব্যাক</p></motion.div>
                     </div>
                 </div>
 
-                <div className="scene-container">
+                {/* <div className="scene-container">
 
 
 
@@ -220,7 +226,7 @@ export default function StakeholderDashboard() {
                     <div className="pipe">
                         <svg viewBox="0 0 120 80"><rect x="20" y="0" width="100" height="30" fill="#9CA3AF" /><ellipse cx="20" cy="15" rx="8" ry="15" fill="#4B5563" /><path d="M20 20 C 30 50, 10 70, 0 80 L 50 80 C 40 70, 60 50, 20 20 Z" fill="#1E40AF" /><path d="M22 25 C 28 45, 25 60, 15 75" stroke="white" strokeWidth="2" fill="none" opacity="0.5" /></svg>
                     </div>
-                </div>
+                </div> */}
             </div>
 
 

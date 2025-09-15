@@ -66,7 +66,7 @@ export default function AdminRequestWorkPage() {
         var accessToken = localStorage.getItem('access_token');
         const newgeom = geojsonToWkt(drawnGeometry)
         const data = {
-            city: "Dhaka",
+            city: requestData.city,
             geom: newgeom
         }
 
@@ -92,7 +92,7 @@ export default function AdminRequestWorkPage() {
             //console.log('Successfully got uuid:', result.uuid);
 
             const finalData = {
-                stakeholder: localStorage.getItem("uuid"), //TODO
+                stakeholder: requestData.uuid, //TODO
                 location: result.uuid,
                 name: requestData.reason,
                 details: requestData.reason,
@@ -108,7 +108,7 @@ export default function AdminRequestWorkPage() {
             }
 
             //console.log("final")
-            //console.log(finalData)
+            console.log(finalData)
             const resp = await fetch(`${baseUrl}/works/`, {
                 method: 'POST',
                 headers: {
@@ -124,15 +124,13 @@ export default function AdminRequestWorkPage() {
 
             alert("Work request has been successfully submitted!");
             setDrawnGeometry(null);
-            Navigate("/stakeholder/pending-requests")
+            
 
         } catch (error) {
             console.error('Failed to submit work request:', error);
             alert(`Error: ${error.message}`);
         }
 
-
-        alert("Work request has been submitted!");
         setDrawnGeometry(null);
 
     };

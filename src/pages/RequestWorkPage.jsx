@@ -66,7 +66,7 @@ export default function RequestWorkPage() {
     var accessToken = localStorage.getItem('access_token');
     const newgeom = geojsonToWkt(drawnGeometry)
     const data = {
-      city: "Dhaka",
+      city: requestData.city,
       geom: newgeom
     }
 
@@ -98,7 +98,7 @@ export default function RequestWorkPage() {
         details: requestData.reason,
         tag: (requestData.isEmergency ? "Emergency" : "Regular"),
         status: "ProposedByStakeholder",
-        estimated_time: "30 days",
+        estimated_time: requestData.days,
         proposed_start_date: requestData.startDate,
         proposed_end_date: requestData.endDate,
         start_date: null,
@@ -132,7 +132,7 @@ export default function RequestWorkPage() {
     }
 
 
-    alert("Work request has been submitted!");
+    
     setDrawnGeometry(null);
 
   };

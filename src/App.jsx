@@ -9,15 +9,17 @@ import { Routes, Route } from 'react-router-dom';
 import NoticePage from './pages/NoticePage/NoticePage';
 import Authentication from './pages/authentication';
 import StakeholderDashboard from './pages/stakeholderDashboard';
-import StakeholderNewReq from './pages/stakeholderNewReq';
+
 import StakeholderWorkReq from './pages/stakeholderWorkReq';
 import AuthorityDashboard from './pages/authorityDashboard';
 import AuthorityWorkRequests from './pages/authorityWorkRequests';
-import AuthorityWorkReqConflicted from './components/authorityWorkReqConflict';
+
 import AuthorityConflictChart from './pages/authorityConflictChart';
 import RequestWorkPage from './pages/RequestWorkPage';
 import AdminRequestWorkPage from './pages/authorityNewReq';
 import AuthorityMap from './pages/authoritymap';
+import ClientNotification from './pages/ClientNotification';
+import ClientFeedback from './pages/ClientFeedback';
 const userLoggedIn = true;
 
 function App() {
@@ -47,7 +49,8 @@ function App() {
 
         
         <Route path="/authenticate" element={<Authentication/>}/>
-
+        <Route path="/notifications" element={<ClientNotification />} />
+        <Route path="/feedback" element={<ClientFeedback/>}/>
 
         <Route path="/stakeholder" element={<StakeholderDashboard /> } />        
         <Route path="/stakeholder/requestWork" element={<RequestWorkPage />}></Route>
